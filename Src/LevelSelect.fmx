@@ -1,0 +1,267 @@
+object FormLevelSelect: TFormLevelSelect
+  Left = 0
+  Top = 0
+  Caption = 'Level Select'
+  ClientHeight = 505
+  ClientWidth = 336
+  Fill.Kind = Solid
+  Position = MainFormCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnClose = FormClose
+  DesignerMasterStyle = 0
+  object rectCustom: TRectangle
+    Align = Top
+    Margins.Left = 10.000000000000000000
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Position.X = 10.000000000000000000
+    Position.Y = 237.000000000000000000
+    Size.Width = 316.000000000000000000
+    Size.Height = 238.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    object btnCustom: TButton
+      Align = Bottom
+      StyledSettings = [Family, Style]
+      Margins.Left = 20.000000000000000000
+      Margins.Right = 20.000000000000000000
+      Margins.Bottom = 10.000000000000000000
+      Position.X = 20.000000000000000000
+      Position.Y = 187.000000000000000000
+      Size.Width = 276.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Custom'
+      TextSettings.Font.Size = 16.000000000000000000
+      TextSettings.FontColor = xFF0078D7
+      TextSettings.Trimming = None
+      OnClick = btnCustomClick
+    end
+    object lblCustom: TLabel
+      Align = Top
+      StyledSettings = [Family, Style, FontColor]
+      Margins.Left = 20.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Right = 20.000000000000000000
+      Position.X = 20.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 276.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 18.000000000000000000
+      TextSettings.HorzAlign = Center
+      Text = 'Customize your level'
+      TabOrder = 1
+    end
+    object Layout1: TLayout
+      Align = Top
+      Margins.Left = 10.000000000000000000
+      Margins.Top = 10.000000000000000000
+      Margins.Right = 10.000000000000000000
+      Position.X = 10.000000000000000000
+      Position.Y = 32.000000000000000000
+      Size.Width = 296.000000000000000000
+      Size.Height = 45.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 4
+      object edtColunas: TSpinBox
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Right
+        TabOrder = 0
+        Cursor = crIBeam
+        DecimalDigits = 0
+        Value = 10.000000000000000000
+        DisableFocusEffect = True
+        Position.X = 148.000000000000000000
+        TextSettings.Font.Size = 16.000000000000000000
+        Size.Width = 148.000000000000000000
+        Size.Height = 45.000000000000000000
+        Size.PlatformDefault = False
+        StyledSettings = [Family, Style, FontColor]
+      end
+      object Label1: TLabel
+        Align = Left
+        StyledSettings = [Family, Style, FontColor]
+        Size.Width = 81.000000000000000000
+        Size.Height = 45.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        Text = 'Columns'
+        TabOrder = 1
+      end
+    end
+    object Layout2: TLayout
+      Align = Top
+      Margins.Left = 10.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Right = 10.000000000000000000
+      Position.X = 10.000000000000000000
+      Position.Y = 82.000000000000000000
+      Size.Width = 296.000000000000000000
+      Size.Height = 45.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      object edtLinhas: TSpinBox
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Right
+        TabOrder = 0
+        Cursor = crIBeam
+        DecimalDigits = 0
+        Value = 10.000000000000000000
+        DisableFocusEffect = True
+        Position.X = 148.000000000000000000
+        TextSettings.Font.Size = 16.000000000000000000
+        Size.Width = 148.000000000000000000
+        Size.Height = 45.000000000000000000
+        Size.PlatformDefault = False
+        StyledSettings = [Family, Style, FontColor]
+      end
+      object Label2: TLabel
+        Align = Left
+        StyledSettings = [Family, Style, FontColor]
+        Size.Width = 81.000000000000000000
+        Size.Height = 45.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        Text = 'Lines'
+        TabOrder = 1
+      end
+    end
+    object Layout3: TLayout
+      Align = Top
+      Margins.Left = 10.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Right = 10.000000000000000000
+      Position.X = 10.000000000000000000
+      Position.Y = 132.000000000000000000
+      Size.Width = 296.000000000000000000
+      Size.Height = 45.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      object edtMinas: TSpinBox
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Right
+        TabOrder = 0
+        Cursor = crIBeam
+        DecimalDigits = 0
+        Value = 20.000000000000000000
+        DisableFocusEffect = True
+        Position.X = 148.000000000000000000
+        TextSettings.Font.Size = 16.000000000000000000
+        Size.Width = 148.000000000000000000
+        Size.Height = 45.000000000000000000
+        Size.PlatformDefault = False
+        StyledSettings = [Family, Style, FontColor]
+      end
+      object Label3: TLabel
+        Align = Left
+        StyledSettings = [Family, Style, FontColor]
+        Size.Width = 81.000000000000000000
+        Size.Height = 45.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        Text = 'Mines'
+        TabOrder = 1
+      end
+    end
+  end
+  object btnBeginner: TButton
+    Align = Top
+    StyledSettings = [Family, Style]
+    Margins.Left = 10.000000000000000000
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Position.X = 10.000000000000000000
+    Position.Y = 41.000000000000000000
+    Size.Width = 316.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Text = 'Beginner'
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.FontColor = xFF0078D7
+    TextSettings.Trimming = None
+    OnClick = btnLevelClick
+  end
+  object btnIntermediate: TButton
+    Tag = 1
+    Align = Top
+    StyledSettings = [Family, Style]
+    Margins.Left = 10.000000000000000000
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Position.X = 10.000000000000000000
+    Position.Y = 91.000000000000000000
+    Size.Width = 316.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    Text = 'Intermediate'
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.FontColor = xFF6100D9
+    TextSettings.Trimming = None
+    OnClick = btnLevelClick
+  end
+  object btnAdvanced: TButton
+    Tag = 3
+    Align = Top
+    StyledSettings = [Family, Style]
+    Margins.Left = 10.000000000000000000
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Position.X = 10.000000000000000000
+    Position.Y = 189.000000000000000000
+    Size.Width = 316.000000000000000000
+    Size.Height = 38.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    Text = 'Advanced'
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.FontColor = xFFD72500
+    TextSettings.Trimming = None
+    OnClick = btnLevelClick
+  end
+  object btnExpert: TButton
+    Tag = 2
+    Align = Top
+    StyledSettings = [Family, Style]
+    Margins.Left = 10.000000000000000000
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Position.X = 10.000000000000000000
+    Position.Y = 141.000000000000000000
+    Size.Width = 316.000000000000000000
+    Size.Height = 38.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    Text = 'Expert'
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.FontColor = xFFD78D00
+    TextSettings.Trimming = None
+    OnClick = btnLevelClick
+  end
+  object SkLabel1: TSkLabel
+    Align = Top
+    Margins.Left = 20.000000000000000000
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Position.X = 20.000000000000000000
+    Position.Y = 10.000000000000000000
+    Size.Width = 296.000000000000000000
+    Size.Height = 21.000000000000000000
+    Size.PlatformDefault = False
+    StyledSettings = [Family, Style, FontColor]
+    TextSettings.Font.Size = 16.000000000000000000
+    TextSettings.HorzAlign = Center
+    Words = <
+      item
+        FontColor = xFF004BF0
+        StyledSettings = [Family, Size, Style]
+        Text = 'Choose a Level'
+      end>
+  end
+end

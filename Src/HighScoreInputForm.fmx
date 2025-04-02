@@ -1,0 +1,81 @@
+object FormHighScoreInput: TFormHighScoreInput
+  Left = 0
+  Top = 0
+  Caption = 'HighScore Input'
+  ClientHeight = 138
+  ClientWidth = 267
+  Position = MainFormCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object LayoutMain: TLayout
+    Align = Center
+    Size.Width = 267.000000000000000000
+    Size.Height = 138.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object EditName: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Top
+      TabOrder = 0
+      Position.X = 20.000000000000000000
+      Position.Y = 36.000000000000000000
+      Margins.Left = 20.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Right = 20.000000000000000000
+      Size.Width = 227.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object SkLabel1: TSkLabel
+      Align = Top
+      Margins.Top = 10.000000000000000000
+      Position.Y = 10.000000000000000000
+      Size.Width = 267.000000000000000000
+      Size.Height = 21.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.HorzAlign = Center
+      Words = <
+        item
+          Font.Size = 16.000000000000000000
+          Font.Weight = Bold
+          StyledSettings = [Family, FontColor]
+          Text = 'Player Name'
+        end>
+    end
+    object Laybtns: TLayout
+      Align = Top
+      Margins.Left = 5.000000000000000000
+      Margins.Top = 30.000000000000000000
+      Margins.Right = 5.000000000000000000
+      Position.X = 5.000000000000000000
+      Position.Y = 88.000000000000000000
+      Size.Width = 257.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      object BtnCancel: TButton
+        Align = Right
+        Position.X = 158.000000000000000000
+        Size.Width = 99.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Cancel'
+        TextSettings.Trimming = None
+        OnClick = BtnCancelClick
+      end
+      object BtnSave: TButton
+        Align = Left
+        Size.Width = 105.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Save'
+        TextSettings.Trimming = None
+        OnClick = BtnSaveClick
+      end
+    end
+  end
+end

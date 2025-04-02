@@ -1,0 +1,66 @@
+object FormHighScoreTable: TFormHighScoreTable
+  Left = 0
+  Top = 0
+  Caption = 'HighScore Table'
+  ClientHeight = 401
+  ClientWidth = 254
+  Fill.Kind = Solid
+  Position = MainFormCenter
+  StyleBook = FormMain.StyleBook1
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnClose = FormClose
+  DesignerMasterStyle = 0
+  object ListView: TListView
+    ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
+    ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
+    HeaderAppearanceClassName = 'TListHeaderObjects'
+    FooterAppearanceClassName = 'TListHeaderObjects'
+    Transparent = True
+    Align = Client
+    Margins.Top = 5.000000000000000000
+    Margins.Bottom = 5.000000000000000000
+    Size.Width = 254.000000000000000000
+    Size.Height = 308.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    ItemAppearanceObjects.ItemObjects.Accessory.Visible = False
+    ItemAppearanceObjects.ItemObjects.Image.Visible = False
+    ItemAppearanceObjects.ItemEditObjects.Image.Visible = False
+    StyleLookup = 'listviewstyle'
+    ShowSelection = False
+  end
+  object BtnClose: TButton
+    Align = Bottom
+    Margins.Left = 5.000000000000000000
+    Margins.Right = 5.000000000000000000
+    Margins.Bottom = 10.000000000000000000
+    Position.X = 5.000000000000000000
+    Position.Y = 350.000000000000000000
+    Size.Width = 244.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Text = 'Close'
+    TextSettings.Trimming = None
+    OnClick = BtnCloseClick
+  end
+  object SkLabel1: TSkLabel
+    Align = Top
+    Margins.Top = 5.000000000000000000
+    Position.Y = 5.000000000000000000
+    Size.Width = 254.000000000000000000
+    Size.Height = 27.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.HorzAlign = Center
+    Words = <
+      item
+        Decorations.Thickness = 2.000000000000000000
+        Font.Size = 20.000000000000000000
+        FontColor = xFF004BF0
+        StyledSettings = [Family, Style]
+        Text = 'HiScores'
+      end>
+  end
+end

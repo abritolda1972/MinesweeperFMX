@@ -1,0 +1,63 @@
+object FormInstructions: TFormInstructions
+  Left = 0
+  Top = 0
+  Caption = 'Instructions'
+  ClientHeight = 480
+  ClientWidth = 320
+  Position = MainFormCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnClose = FormClose
+  DesignerMasterStyle = 0
+  object btnClose: TButton
+    Align = Bottom
+    StyledSettings = [Family, Style]
+    Margins.Bottom = 10.000000000000000000
+    Position.Y = 430.000000000000000000
+    Size.Width = 320.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'transparentbutton'
+    TabOrder = 0
+    Text = 'Close'
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.FontColor = xFF0078D7
+    TextSettings.Trimming = None
+    OnClick = btnCloseClick
+  end
+  object rectBackground: TRectangle
+    Align = Client
+    Fill.Color = xFFF8F8F8
+    Size.Width = 320.000000000000000000
+    Size.Height = 430.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    object ScrollBox1: TScrollBox
+      Align = Client
+      Size.Width = 320.000000000000000000
+      Size.Height = 430.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'scrollboxstyle'
+      TabOrder = 0
+      Viewport.Width = 320.000000000000000000
+      Viewport.Height = 430.000000000000000000
+      object sklblContent: TSkLabel
+        Align = Top
+        Margins.Left = 10.000000000000000000
+        Margins.Right = 10.000000000000000000
+        Position.X = 10.000000000000000000
+        Size.Width = 300.000000000000000000
+        Size.Height = 0.000000000000000000
+        Size.PlatformDefault = False
+        StyledSettings = [Size, Style]
+        TextSettings.Font.Families = 'Arial'
+        TextSettings.FontColor = xFF333333
+        Words = <
+          item
+          end>
+      end
+    end
+  end
+end
