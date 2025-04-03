@@ -2,7 +2,7 @@
 Jogo Minesweeper em Delphi Firemonkey com Skia4Delphi
 
 This game was developed for the RAD Programmer Challenge #1
-## Instal / Compile
+## Install / Compile
 To compile the game you need to install the SevenSegmentsDisplay
 component supplied with the code.
 On windows, compile and copy the Assets folder to the executable folder.
