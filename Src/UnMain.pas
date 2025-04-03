@@ -61,6 +61,7 @@ type
     procedure BtnHighScoresClick(Sender: TObject);
     procedure btnhelpClick(Sender: TObject);
     procedure btnhelpTap(Sender: TObject; const Point: TPointF);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     NUM_MINAS: Integer;
     FCelulaSize: Single;
@@ -294,6 +295,12 @@ begin
   FormMain.Height := floor(SkPaintBox.Height + Layout1.Height + 90);
 {$ENDIF}
 
+end;
+
+procedure TFormMain.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+FRevealAnimations.Free;
+FAnimations.Free;
 end;
 
 procedure TFormMain.FormCreate(Sender: TObject);

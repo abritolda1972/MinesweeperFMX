@@ -18,6 +18,9 @@ uses
 {$R *.res}
 
 begin
+  {$IFDEF DEBUG}
+  ReportMemoryLeaksOnShutdown := True;
+  {$ENDIF}
   GlobalUseSkia := True;
   GlobalUseSkiaRasterWhenAvailable:=False;
   GlobalUseVulkan:=True;

@@ -13,6 +13,7 @@ object FormMain: TFormMain
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
+  OnClose = FormClose
   DesignerMasterStyle = 0
   object Timer: TTimer
     OnTimer = TimerTimer
@@ -16949,7 +16950,7 @@ object FormMain: TFormMain
     Enabled = False
     Interval = 100
     OnTimer = TimerLongtapTimer
-    Left = 216
+    Left = 152
     Top = 81
   end
   object LayoutGameOver: TLayout
@@ -16998,7 +16999,7 @@ object FormMain: TFormMain
     Styles = <
       item
       end>
-    Left = 144
-    Top = 240
+    Left = 160
+    Top = 144
   end
 end
