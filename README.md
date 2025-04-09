@@ -7,7 +7,7 @@ To compile the game
 On windows, compile and copy the Assets folder to the executable folder.
 On android just compile and deploy.
 
-##New Version
+## New Version
 New version, with improved graphics, possibility of creating up to 100 X 100 cells with 9000 mines. 
 Minimap for orientation of the game position on the board, new drop-down menu, 
 equal level layout on both windows and mobile devices. Possibility of replaying the game 
