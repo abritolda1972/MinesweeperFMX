@@ -19,7 +19,7 @@ uses
 
 begin
   {$IFDEF DEBUG}
-  ReportMemoryLeaksOnShutdown := True;
+ // ReportMemoryLeaksOnShutdown := True;
   {$ENDIF}
   GlobalUseSkia := True;
   GlobalUseSkiaRasterWhenAvailable:=False;

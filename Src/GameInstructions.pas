@@ -29,6 +29,8 @@ implementation
 
 {$R *.fmx}
 
+uses UnMain;
+
 procedure TFormInstructions.btnCloseClick(Sender: TObject);
 begin
  Close;
@@ -78,7 +80,7 @@ begin
     '- Intermediate (12x12 - 20 mines)' + sLineBreak +
     '- Expert (16x16 - 60 mines)' + sLineBreak +
     '- Advanced (30x16 - 100 mines)' + sLineBreak +
-    '- Custom (Up to 30x16 cells)' + sLineBreak +
+    '- Custom (Up to 100x100 cells)' + sLineBreak +
     '  With customizable number of mines' + sLineBreak + sLineBreak +
 
     '[📚 Learn more about](https://github.com/abritolda1972/MinesweeperFMX)');

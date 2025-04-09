@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 20">
+  <defs>
+    <clipPath id="clippath">
+      <rect width="50" height="20" fill="none"/>
+    </clipPath>
+  </defs>
+  <!-- Generator: Adobe Illustrator 28.7.1, SVG Export Plug-In . SVG Version: 1.2.0 Build 142)  -->
+  <g>
+    <g id="Camada_1">
+      <g>
+        <g clip-path="url(#clippath)">
+          <rect x="0" width="50" height=".1" fill="#7f6000"/>
+          <rect x="0" y=".1" width="50" height=".4" fill="#7e5f00"/>
+          <rect x="0" y=".5" width="50" height=".4" fill="#7d5e00"/>
+          <rect x="0" y=".9" width="50" height=".4" fill="#7c5d00"/>
+          <rect x="0" y="1.2" width="50" height=".4" fill="#7b5c00"/>
+          <rect x="0" y="1.6" width="50" height=".4" fill="#7a5b00"/>
+          <rect x="0" y="1.9" width="50" height=".4" fill="#795a00"/>
+          <rect x="0" y="2.3" width="50" height=".4" fill="#785900"/>
+          <rect x="0" y="2.6" width="50" height=".4" fill="#775800"/>
+          <rect x="0" y="3" width="50" height=".4" fill="#765700"/>
+          <rect x="0" y="3.4" width="50" height=".4" fill="#755600"/>
+          <rect x="0" y="3.7" width="50" height=".4" fill="#745500"/>
+          <rect x="0" y="4.1" width="50" height=".4" fill="#735400"/>
+          <rect x="0" y="4.4" width="50" height=".4" fill="#725300"/>
+          <rect x="0" y="4.8" width="50" height=".4" fill="#715200"/>
+          <rect x="0" y="5.1" width="50" height=".4" fill="#705100"/>
+          <rect x="0" y="5.5" width="50" height=".4" fill="#6f5000"/>
+          <rect x="0" y="5.8" width="50" height=".4" fill="#6e4f00"/>
+          <rect x="0" y="6.2" width="50" height=".4" fill="#6d4e00"/>
+          <rect x="0" y="6.6" width="50" height=".4" fill="#6c4d00"/>
+          <rect x="0" y="6.9" width="50" height=".4" fill="#6b4c00"/>
+          <rect x="0" y="7.3" width="50" height=".4" fill="#694a00"/>
+          <rect x="0" y="7.6" width="50" height=".4" fill="#684900"/>
+          <rect x="0" y="8" width="50" height=".4" fill="#674800"/>
+          <rect x="0" y="8.3" width="50" height=".4" fill="#664700"/>
+          <rect x="0" y="8.7" width="50" height=".4" fill="#654600"/>
+          <rect x="0" y="9.1" width="50" height=".4" fill="#644500"/>
+          <rect x="0" y="9.4" width="50" height=".4" fill="#634400"/>
+          <rect x="0" y="9.8" width="50" height=".4" fill="#624300"/>
+          <rect x="0" y="10.1" width="50" height=".4" fill="#614200"/>
+          <rect x="0" y="10.5" width="50" height=".4" fill="#604100"/>
+          <rect x="0" y="10.8" width="50" height=".4" fill="#5f4000"/>
+          <rect x="0" y="11.2" width="50" height=".4" fill="#5e3f00"/>
+          <rect x="0" y="11.6" width="50" height=".4" fill="#5d3e00"/>
+          <rect x="0" y="11.9" width="50" height=".4" fill="#5c3d00"/>
+          <rect x="0" y="12.3" width="50" height=".4" fill="#5b3c00"/>
+          <rect x="0" y="12.6" width="50" height=".4" fill="#5a3b00"/>
+          <rect x="0" y="13" width="50" height=".4" fill="#593a00"/>
+          <rect x="0" y="13.3" width="50" height=".4" fill="#583900"/>
+          <rect x="0" y="13.7" width="50" height=".4" fill="#573800"/>
+          <rect x="0" y="14" width="50" height=".4" fill="#563700"/>
+          <rect x="0" y="14.4" width="50" height=".4" fill="#553600"/>
+          <rect x="0" y="14.8" width="50" height="5.2" fill="#553600"/>
+        </g>
+        <polygon points="37.3 4.5 26 15.6 13.8 4.4 37.3 4.5" fill="#b75f00"/>
+      </g>
+    </g>
+  </g>
+</svg>

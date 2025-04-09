@@ -17,6 +17,8 @@ type
     BtnCancel: TButton;
     SkLabel1: TSkLabel;
     Laybtns: TLayout;
+    Layout1: TLayout;
+    SkSvg1: TSkSvg;
     procedure BtnSaveClick(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
   private
@@ -29,6 +31,8 @@ type
 implementation
 
 {$R *.fmx}
+
+uses UnMain;
 
 class procedure TFormHighScoreInput.ShowInput(const CurrentName: string; Callback: TInputResultProc);
 var

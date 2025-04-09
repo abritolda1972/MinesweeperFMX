@@ -30,6 +30,10 @@ type
     Layout3: TLayout;
     edtMinas: TSpinBox;
     Label3: TLabel;
+    Laybtn1: TLayout;
+    Laybtn2: TLayout;
+    SkSvg1: TSkSvg;
+    Layicon: TLayout;
     procedure btnLevelClick(Sender: TObject);
     procedure btnCustomClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -86,22 +90,22 @@ end;
 procedure TFormLevelSelect.FormCreate(Sender: TObject);
 begin
 // Valores máximos baseados na plataforma
-  {$IFDEF MSWINDOWS}
-  MaxCols := 30;
-  MaxRows := 16;
-  {$ENDIF}
-  {$IFDEF ANDROID}
-  MaxCols := Trunc(Screen.Width / 25);
-  MaxRows := Trunc((Screen.Height - 200) / 25);
-  {$ENDIF}
+ // {$IFDEF MSWINDOWS}
+  MaxCols := 100;
+  MaxRows := 100;
+//  {$ENDIF}
+//  {$IFDEF ANDROID}
+//  MaxCols := Trunc(Screen.Width / 25);
+//  MaxRows := Trunc((Screen.Height - 200) / 25);
+//  {$ENDIF}
 
   edtColunas.Max:= MaxCols;
   edtlinhas.Max:= MaxRows;
   edtminas.Max:= Trunc(MaxCols * MaxRows * 0.8);
 
-  edtColunas.Min:= 8;
-  edtlinhas.Min:= 8;
-  edtminas.Min:= 10;
+  edtColunas.Min:= 3;
+  edtlinhas.Min:= 3;
+  edtminas.Min:= 5;
 
 end;
 
@@ -133,26 +137,20 @@ end;
 
 procedure TFormLevelSelect.btnCustomClick(Sender: TObject);
 begin
-  // Valores máximos baseados na plataforma
-  {$IFDEF MSWINDOWS}
-  MaxCols := 30;
-  MaxRows := 16;
-  {$ENDIF}
-  {$IFDEF ANDROID}
-  MaxCols := Trunc(Screen.Width / 25);
-  MaxRows := Trunc((Screen.Height - 200) / 25);
-  {$ENDIF}
 
   try
 
-    if (CustomCols < 8) or (CustomCols > MaxCols) then
+    if (CustomCols < 3) or (CustomCols > MaxCols) then
       raise Exception.Create('Columns must be between 8-' + MaxCols.ToString);
 
-    if (CustomRows < 8) or (CustomRows > MaxRows) then
+    if (CustomRows < 3) or (CustomRows > MaxRows) then
       raise Exception.Create('Lines must be between 8-' + MaxRows.ToString);
 
-    if (CustomMines < 10) or (CustomMines > (MaxCols * MaxRows * 0.8)) then
-      raise Exception.Create('Mines should be in the top 10-' + Trunc(MaxCols * MaxRows * 0.8).ToString);
+    if (CustomMines < 5) or (CustomMines > ((MaxCols * MaxRows) * 0.9)) then
+      raise Exception.Create('Mines should be in the top 5-' + Trunc((MaxCols * MaxRows) * 0.9).ToString);
+
+    if (CustomMines < 5) or (CustomMines > ((CustomCols * CustomRows) * 0.9)) then
+      raise Exception.Create('Number of mines must be less than number of cells 5-' + Trunc((CustomCols * CustomRows) * 0.9).ToString);
 
     SelectedLevel := glcustom;
     if Assigned(FOnLevelSelected) then

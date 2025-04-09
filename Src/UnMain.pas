@@ -1,11 +1,11 @@
-unit UnMain;
+﻿unit UnMain;
 
 interface
 
 uses System.SysUtils, System.Types, System.UITypes, System.Classes,
   FMX.Layouts, System.DateUtils,  FMX.Ani, System.IOUtils, System.Diagnostics,
   FMX.Objects, FMX.Effects, System.Math.Vectors, System.Math, System.Generics.Collections,
-  SevenSegmentDisplay, SoundManager, FMX.Gestures, FMX.Controls, FMX.Types,
+  SoundManager, FMX.Gestures, FMX.Controls, FMX.Types,
   FMX.Controls.Presentation, FMX.StdCtrls, System.Skia, FMX.Skia, FMX.Forms;
 
 const CORES_NUMEROS: array [1 .. 8] of TAlphaColor = ($FF0000FF, // Blue
@@ -16,9 +16,16 @@ const CORES_NUMEROS: array [1 .. 8] of TAlphaColor = ($FF0000FF, // Blue
     $FF00FFFF, // Cyan
     $FF000000, // Black
     $FF808080 // Grey
-    ); COR_FUNDO_3D = $FFD0D0D0; COR_BORDA_CLARA = $FFFFFFFF;
-  COR_BORDA_ESCURA = $FF808080; SOMBRA_OFFSET = 2; SOMBRA_SUAVIZACAO = 4;
-  LONG_TIME = 4; // Contol Time for Long Tap
+    );
+    COR_FUNDO_3D = $FF2D2F31;
+    COR_BORDA_CLARA = $FFF6CA6B;
+    COR_BORDA_ESCURA = $FFA8552A;
+    COR_GRADIENTA = $FF37393C;
+
+
+    SOMBRA_OFFSET = 2;
+    SOMBRA_SUAVIZACAO = 4;
+    LONG_TIME = 4; // Contol Time for Long Tap
 
 type
   TGameLevel = (glBeginner, glIntermediate, glExpert, glAdvanced, glCustom);
@@ -26,13 +33,10 @@ type
   TFormMain = class(TForm)
     SkPaintBox: TSkPaintBox;
     Timer: TTimer;
-    Rectangle1: TRectangle;
+    RectBackground: TRectangle;
     ShadowEffect1: TShadowEffect;
-    nminas: TSevenSegmentDisplay;
-    NSeconds: TSevenSegmentDisplay;
-    BtnNewGame: TSkSvg;
+    imgLogoGame: TSkSvg;
     Rectangle2: TRectangle;
-    SkLabel1: TSkLabel;
     TimerLongtap: TTimer;
     LayoutGameOver: TLayout;
     RectangleOverlay: TRectangle;
@@ -40,28 +44,73 @@ type
     FloatAnimationPulse: TFloatAnimation;
     Layout1: TLayout;
     StyleBook1: TStyleBook;
-    BtnHighScores: TSkSvg;
-    btnhelp: TSkSvg;
+    RectFundoJogo: TRectangle;
+    ScrollBoxGame: TScrollBox;
+    GestureManager1: TGestureManager;
+    rectsizescroll: TRectangle;
+    MiniMapPaintBox: TSkPaintBox;
+    SkSvg1: TSkSvg;
+    Layout2: TLayout;
+    btnrepeate: TButton;
+    Laybtn: TLayout;
+    btnnewLevel: TButton;
+    ShadowEffect2: TShadowEffect;
+    SkpNrMinas: TSkPaintBox;
+    SkpNrSeconds: TSkPaintBox;
+    LayMenu: TLayout;
+    imgsetabtnmenu: TSkSvg;
+    SkSvg3: TSkSvg;
+    imgfundo: TSkSvg;
+    FloatAnimationMenu: TFloatAnimation;
+    SkLabel2: TSkLabel;
+    Layabout: TLayout;
+    LayLevel: TLayout;
+    IMgLevel: TSkSvg;
+    SkLabel3: TSkLabel;
+    LayInstructions: TLayout;
+    SkSvg4: TSkSvg;
+    SkLabel4: TSkLabel;
+    LayHighscores: TLayout;
+    SkSvg5: TSkSvg;
+    SkLabel5: TSkLabel;
+    LayoutLogo: TLayout;
+    SkLabel1: TSkLabel;
+    Imgbombnumber: TSkSvg;
+    SkSvg2: TSkSvg;
     procedure FormCreate(Sender: TObject);
     procedure SkPaintBoxMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Single);
     procedure TimerTimer(Sender: TObject);
     procedure SkPaintBoxDraw(ASender: TObject; const ACanvas: ISkCanvas;
       const ADest: TRectF; const AOpacity: Single);
-    procedure BtnNewGameClick(Sender: TObject);
-    procedure BtnNewGameMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Single);
-    procedure BtnNewGameMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Single);
     procedure SkPaintBoxMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Single);
     procedure TimerLongtapTimer(Sender: TObject);
-    procedure BtnNewGameMouseLeave(Sender: TObject);
     procedure SkPaintBoxDblClick(Sender: TObject);
     procedure BtnHighScoresClick(Sender: TObject);
     procedure btnhelpClick(Sender: TObject);
     procedure btnhelpTap(Sender: TObject; const Point: TPointF);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure SkPaintBoxMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Single);
+    procedure FormResize(Sender: TObject);
+    procedure ScrollBoxGameViewportPositionChange(Sender: TObject;
+      const OldViewportPosition, NewViewportPosition: TPointF;
+      const ContentSizeChanged: Boolean);
+    procedure MiniMapPaintBoxDraw(ASender: TObject; const ACanvas: ISkCanvas;
+      const ADest: TRectF; const AOpacity: Single);
+    procedure btnrepeateClick(Sender: TObject);
+    procedure btnrepeateTap(Sender: TObject; const Point: TPointF);
+    procedure SkpNrMinasDraw(ASender: TObject; const ACanvas: ISkCanvas;
+      const ADest: TRectF; const AOpacity: Single);
+    procedure SkpNrSecondsDraw(ASender: TObject; const ACanvas: ISkCanvas;
+      const ADest: TRectF; const AOpacity: Single);
+    procedure imgsetabtnmenuClick(Sender: TObject);
+    procedure FloatAnimationMenuFinish(Sender: TObject);
+    procedure IMgLevelClick(Sender: TObject);
+    procedure IMgLevelTap(Sender: TObject; const Point: TPointF);
+    procedure btnnewLevelTap(Sender: TObject; const Point: TPointF);
+    procedure btnnewLevelClick(Sender: TObject);
   private
     NUM_MINAS: Integer;
     FCelulaSize: Single;
@@ -96,6 +145,24 @@ type
     FLinhas: Integer;
 
     TempoAtual: Integer; // save the time that ended when you win
+    FCachedCellTexture: ISkImage;
+
+    FIsScrolling: Boolean;
+    FLastMousePos: TPointF;
+
+    //Number Mines shader
+    FNrMinas: Integer;
+    NSKeffect :Iskruntimeeffect;
+    NSKshaderBuilder: Iskruntimeshaderbuilder;
+    NSKShader: Iskshader;
+    error: String;
+
+    //Number Sconds Shader
+    NTKeffect :Iskruntimeeffect;
+    NTKshaderBuilder: Iskruntimeshaderbuilder;
+    NTKShader: Iskshader;
+    FNrSeconds: Integer;
+
 
     procedure ManualTap(ASender: TObject; X, Y: Single);
     procedure ManualLongTap(X, Y: Single);
@@ -118,8 +185,18 @@ type
     function ContarBandeirasVizinhas(X, Y: Integer): Integer;
     procedure HandleLevelSelected(Sender: TObject; ALevel: TGameLevel; Cols,
       Rows, Mines: Integer);
+    procedure PreRenderCellTexture;
+    procedure RepositionSkPaintBox;
+    procedure DrawClock(Acanvas: ISKCanvas; Adest: TRectF; Apaint: Iskpaint);
+    procedure SetNrMinas(const Value: Integer);
+    procedure DrawMines(Acanvas: ISKCanvas; Adest: TRectF; Apaint: Iskpaint);
+    procedure SetNrSeconds(const Value: Integer);
+
   public
     { Public declarations }
+    property NrMinas: Integer read FNrMinas write SetNrMinas default 0;
+    property NrSeconds: Integer read FNrSeconds write SetNrSeconds default 0;
+
   end;
 
 var FormMain: TFormMain;
@@ -131,6 +208,121 @@ implementation
 
 uses HighScoreInputForm, HighScoreManager, HighScoreTableForm, LevelSelect,
   GameInstructions;
+
+
+Procedure TFormMain.DrawMines(Acanvas: ISKCanvas; Adest: TRectF; Apaint: Iskpaint);
+Begin
+
+if assigned(NSKShaderBuilder) then
+Begin
+  if(NSKeffect.UniformExists('iResolution')) then
+    NSKShaderBuilder.SetUniform('iResolution',[SkpNrMinas.Width, SkpNrMinas.Height,0]);
+    if(NSKeffect.UniformExists('iTime')) then
+    NSKShaderBuilder.SetUniform('iTime',single(random));
+  if(NSKeffect.UniformExists('nnumber')) then
+    NSKShaderBuilder.SetUniform('nnumber',NrMinas);
+    NSKShader:=NSKshaderBuilder.MakeShader;
+
+    Apaint.Shader:= NSKshader;
+    Acanvas.Save;
+      try
+
+      Acanvas.ClipRect(adest);
+      acanvas.DrawPaint(Apaint);
+
+    finally
+      Acanvas.Restore;
+    end;
+End;
+End;
+
+
+
+Procedure TFormMain.DrawClock(Acanvas: ISKCanvas; Adest: TRectF; Apaint: Iskpaint);
+Begin
+
+if assigned(NTKShaderBuilder) then
+Begin
+  if(NTKeffect.UniformExists('iResolution')) then
+    NTKShaderBuilder.SetUniform('iResolution',[SkpNrSeconds.Width, SkpNrSeconds.Height,0]);
+    if(NTKeffect.UniformExists('iTime')) then
+    NTKShaderBuilder.SetUniform('iTime',single(random));
+  if(NTKeffect.UniformExists('nnumber')) then
+    NTKShaderBuilder.SetUniform('nnumber',NrSeconds);
+    NTKShader:=NTKshaderBuilder.MakeShader;
+
+    Apaint.Shader:= NTKshader;
+    Acanvas.Save;
+      try
+
+      Acanvas.ClipRect(adest);
+      acanvas.DrawPaint(Apaint);
+
+    finally
+      Acanvas.Restore;
+    end;
+End;
+End;
+
+procedure TFormMain.RepositionSkPaintBox;
+var
+  ScrollBoxContent: TControl;
+  RequiredWidth, RequiredHeight: Single;
+begin
+  ScrollBoxContent := ScrollBoxGame.Content;
+  // Sets the minimum size of the Content (SkPaintBox + margins)
+  RequiredWidth := SkPaintBox.Width + 40; // 20px each side
+  RequiredHeight := SkPaintBox.Height + 40;
+
+  // Forces the size of the Content (even if SkPaintBox is small)
+  ScrollBoxContent.Width := RequiredWidth;
+  ScrollBoxContent.Height := RequiredHeight;
+
+  // Updates the background rectangle
+  rectsizescroll.Position.X := 0;
+  rectsizescroll.Position.Y := 0;
+  rectsizescroll.Width := RequiredWidth;
+  rectsizescroll.Height := RequiredHeight;
+
+  // Center or position with margins
+  if (ScrollBoxGame.Width >= RequiredWidth) and (ScrollBoxGame.Height >= RequiredHeight) then
+  begin
+    // Center the field
+    rectsizescroll.Position.X := (ScrollBoxGame.Width - SkPaintBox.Width) / 2-20;
+    rectsizescroll.Position.Y := (ScrollBoxGame.Height - SkPaintBox.Height) / 2-20;
+     if (ScrollBoxGame.Width >= RequiredWidth) then
+
+       SkPaintBox.Position.X := 20;
+      SkPaintBox.Position.Y := 20;
+      MiniMapPaintBox.Visible:=false;
+  end
+  else
+  begin
+
+    // Position top left corner with margins
+    SkPaintBox.Position.X := (rectsizescroll.Width - SkPaintBox.Width) / 2;
+    SkPaintBox.Position.Y := (rectsizescroll.Height - SkPaintBox.Height) / 2;
+
+  //  rectsizescroll.Position.Y := (ScrollBoxGame.Height - SkPaintBox.Height) / 2-20;
+    MiniMapPaintBox.Visible:=True;
+  end;
+
+  // Updateo ScrollBox
+  ScrollBoxGame.InvalidateContentSize;
+end;
+
+
+procedure TFormMain.PreRenderCellTexture;
+var
+  LSurface: ISkSurface;
+  LCelulaSize: Single;
+begin
+  LCelulaSize := 25; // Tamanho base da célula (ajuste conforme seu cálculo de FCelulaSize)
+  LSurface := TSkSurface.MakeRaster(Trunc(LCelulaSize), Trunc(LCelulaSize));
+  LSurface.Canvas.Clear(TAlphaColors.Null);
+  DesenharCelula3D(LSurface.Canvas, RectF(0, 0, LCelulaSize, LCelulaSize), False, False);
+  FCachedCellTexture := LSurface.MakeImageSnapshot;
+end;
 
 procedure CarregarSVGDoRecurso(SkSVG: TSkSvg; const NomeRecurso: string);
 var ResourceStream: TResourceStream; SVGData: TBytes;
@@ -148,66 +340,104 @@ begin
   end;
 end;
 
+
 procedure TFormMain.DesenharCelula3D(const ACanvas: ISkCanvas;
   const ARect: TRectF; Revelada, Marcada: Boolean);
 var
-  LPaint: ISkPaint; LPath: ISkPath; LPathBuilder: ISkPathBuilder;
+  LPaint: ISkPaint;
+  LPath: ISkPath;
+  LPathBuilder: ISkPathBuilder;
+  LInnerRect: TRectF; // Retângulo interno para espaçamento
 begin
   LPaint := TSkPaint.Create;
   LPaint.AntiAlias := True;
 
+  // Reduz 1 pixel em cada lado para criar 2px de espaço entre células
+  LInnerRect := RectF(
+    ARect.Left + 2,
+    ARect.Top + 2,
+    ARect.Right - 2,
+    ARect.Bottom - 2
+  );
+
   if not Revelada then begin
-    // Efeito de relevo para c�lulas n�o reveladas
+    // Ajusta o caminho para o retângulo interno
     LPathBuilder := TSkPathBuilder.Create;
-    LPathBuilder.AddRect(ARect);
+    LPathBuilder.AddRect(LInnerRect);
     LPath := LPathBuilder.Detach;
 
-    // 3D shading
+    // 3D shading (usando o retângulo interno)
     LPaint.Color := COR_FUNDO_3D;
     LPaint.Style := TSkPaintStyle.Fill;
-    LPaint.ImageFilter := TSkImageFilter.MakeDropShadowOnly(SOMBRA_OFFSET,
-      SOMBRA_OFFSET, SOMBRA_SUAVIZACAO, SOMBRA_SUAVIZACAO, TAlphaColors.Black);
+    LPaint.ImageFilter := TSkImageFilter.MakeDropShadowOnly(
+      SOMBRA_OFFSET,
+      SOMBRA_OFFSET,
+      SOMBRA_SUAVIZACAO,
+      SOMBRA_SUAVIZACAO,
+      TAlphaColors.Black
+    );
     ACanvas.DrawPath(LPath, LPaint);
 
-    // Gradient fill
+    // Gradient fill (ajustado para o retângulo interno)
     LPaint.Reset;
-    LPaint.Shader := TSkShader.MakeGradientLinear(PointF(ARect.Left, ARect.Top),
-      PointF(ARect.Right, ARect.Bottom), [TAlphaColors.White,
-      COR_FUNDO_3D], [0, 1]);
-    ACanvas.DrawRect(ARect, LPaint);
+    LPaint.Shader := TSkShader.MakeGradientLinear(
+      PointF(LInnerRect.Left, LInnerRect.Top),
+      PointF(LInnerRect.Right, LInnerRect.Bottom),
+      [COR_GRADIENTA, COR_FUNDO_3D],
+      [0, 1]
+    );
+    ACanvas.DrawRect(LInnerRect, LPaint);
 
-    // 3D edges
+    // Bordas 3D (desenhadas dentro do retângulo interno)
     LPaint.Reset;
     LPaint.StrokeWidth := 1;
     LPaint.Style := TSkPaintStyle.Stroke;
 
-    // Clear top/left edge
+    // Borda clara (topo/esquerda)
     LPaint.Color := COR_BORDA_CLARA;
-    ACanvas.DrawLine(PointF(ARect.Left, ARect.Bottom - 1),
-      PointF(ARect.Left, ARect.Top), LPaint);
-    ACanvas.DrawLine(PointF(ARect.Left, ARect.Top),
-      PointF(ARect.Right - 1, ARect.Top), LPaint);
+    ACanvas.DrawLine(
+      PointF(LInnerRect.Left, LInnerRect.Bottom),
+      PointF(LInnerRect.Left, LInnerRect.Top),
+      LPaint
+    );
+    ACanvas.DrawLine(
+      PointF(LInnerRect.Left, LInnerRect.Top),
+      PointF(LInnerRect.Right, LInnerRect.Top),
+      LPaint
+    );
 
-    // Bottom edge/dark right
+    // Borda escura (direita/baixo)
     LPaint.Color := COR_BORDA_ESCURA;
-    ACanvas.DrawLine(PointF(ARect.Right - 1, ARect.Top + 1),
-      PointF(ARect.Right - 1, ARect.Bottom - 1), LPaint);
-    ACanvas.DrawLine(PointF(ARect.Left + 1, ARect.Bottom - 1),
-      PointF(ARect.Right - 1, ARect.Bottom - 1), LPaint);
+    ACanvas.DrawLine(
+      PointF(LInnerRect.Right, LInnerRect.Top),
+      PointF(LInnerRect.Right, LInnerRect.Bottom),
+      LPaint
+    );
+    ACanvas.DrawLine(
+      PointF(LInnerRect.Left, LInnerRect.Bottom),
+      PointF(LInnerRect.Right, LInnerRect.Bottom),
+      LPaint
+    );
   end else begin
-    // Lowered effect for revealed cells
+    // Célula revelada: Fundo branco apenas no retângulo interno
     LPaint.Color := TAlphaColors.White;
     LPaint.Style := TSkPaintStyle.Fill;
-    ACanvas.DrawRect(ARect, LPaint);
+    ACanvas.DrawRect(LInnerRect, LPaint); // <-- Desenha apenas a área interna
 
-    // Internal shade
-    LPaint.Color := TAlphaColors.LtGray;
-    LPaint.Style := TSkPaintStyle.Stroke;
-    LPaint.StrokeWidth := 1;
-    ACanvas.DrawRect(RectF(ARect.Left + 0.5, ARect.Top + 0.5, ARect.Right - 0.5,
-      ARect.Bottom - 0.5), LPaint);
+//    // Borda interna (opcional)
+//    LPaint.Color := TAlphaColors.Black;
+//    LPaint.Style := TSkPaintStyle.Stroke;
+//    LPaint.StrokeWidth := 1;
+//    ACanvas.DrawRect(
+//      RectF(
+//        LInnerRect.Left + 1,
+//        LInnerRect.Top + 1,
+//        LInnerRect.Right - 1,
+//        LInnerRect.Bottom - 1
+//      ),
+//      LPaint
+//    );
   end;
-
 end;
 
 procedure TFormMain.RevealAnimationTimer(Sender: TObject);
@@ -221,12 +451,15 @@ begin
   if FRevealAnimations.Count > 0 then SkPaintBox.Redraw;
 end;
 
-procedure TFormMain.SetLevel(ALevel: TGameLevel; Acolumns, ALines, Amines: Integer);
-var MaxColumns, MaxLines: Integer;
+procedure TFormMain.ScrollBoxGameViewportPositionChange(Sender: TObject;
+  const OldViewportPosition, NewViewportPosition: TPointF;
+  const ContentSizeChanged: Boolean);
 begin
+MiniMapPaintBox.Redraw;
+end;
 
-  MaxColumns := floor((FormMain.Width - 20) / 25);
-  MaxLines := floor((FormMain.Height - floor(Layout1.Height) - 50) / 25);
+procedure TFormMain.SetLevel(ALevel: TGameLevel; Acolumns, ALines, Amines: Integer);
+begin
 
   FGameLevel := ALevel;
   case ALevel of
@@ -239,17 +472,17 @@ begin
   glIntermediate: begin
       FColunas := 12;
       FLinhas := 12;
-      NUM_MINAS := 20;
+      NUM_MINAS := 30;
     end; // 20 mines
   glExpert: begin
       FColunas := 16;
       FLinhas := 16;
-      NUM_MINAS := 60;
+      NUM_MINAS := 80;
     end; // 60 mines
   glAdvanced: begin
       FColunas := 30;
-      FLinhas := 16;
-      NUM_MINAS := 100;
+      FLinhas := 30;
+      NUM_MINAS := 250;
     end; // 100 mines
   glCustom : begin
       FColunas := Acolumns;
@@ -269,14 +502,14 @@ begin
       NUM_MINAS := 20;
     end; // 20 mines
   glExpert: begin
-      FColunas := MaxColumns;
-      FLinhas := MaxLines div 2;
-      NUM_MINAS := Ceil((FColunas * FLinhas) * 0.24);
+      FColunas := 16;
+      FLinhas := 16;
+      NUM_MINAS := 60;
     end; // ~62 mines
   glAdvanced: begin
-      FColunas := MaxColumns;
-      FLinhas := MaxLines;
-      NUM_MINAS := Ceil((FColunas * FLinhas) * 0.26);
+      FColunas := 30;
+      FLinhas := 30;
+      NUM_MINAS := 250;
     end;
   glCustom : begin
        FColunas := Acolumns;
@@ -290,10 +523,41 @@ begin
   SkPaintBox.Width := FColunas * 25; // Width based on columns
   SkPaintBox.Height := FLinhas * 25; // Height based on lines
 
-{$IFDEF MSWINDOWS}
-  FormMain.Width := floor(SkPaintBox.Width + 40);
-  FormMain.Height := floor(SkPaintBox.Height + Layout1.Height + 90);
-{$ENDIF}
+
+//{$IFDEF MSWINDOWS}
+//  FormMain.Width := floor(RectFundo.Width + 40);
+//  FormMain.Height := floor(RectFundo.Height + Layout1.Height + 90);
+//{$ENDIF}
+ SkPaintBox.Position.X:=20;
+ SkPaintBox.Position.y:=20;
+
+ RepositionSkPaintBox; // ⬅️ Novo código
+
+ PreRenderCellTexture;
+end;
+
+procedure TFormMain.SetNrSeconds(const Value: Integer);
+begin
+  FNrSeconds := Value;
+  skpnrseconds.Redraw;
+end;
+
+procedure TFormMain.SetNrMinas(const Value: Integer);
+begin
+  FNrMinas := Value;
+  skpnrminas.Redraw;
+end;
+
+procedure TFormMain.FloatAnimationMenuFinish(Sender: TObject);
+begin
+if laymenu.Tag=1 then
+Begin
+  imgsetabtnmenu.RotationAngle:=180;
+end
+else
+Begin
+ imgsetabtnmenu.RotationAngle:=0;
+end;
 
 end;
 
@@ -303,20 +567,120 @@ FRevealAnimations.Free;
 FAnimations.Free;
 end;
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.MiniMapPaintBoxDraw(ASender: TObject; const ACanvas: ISkCanvas;
+  const ADest: TRectF; const AOpacity: Single);
+var
+  I, J: Integer;
+  CellWidth, CellHeight: Single;
+  MiniCellRect, ViewportRect: TRectF;
+  MinPaint: ISKpaint;
 begin
-  SetLevel(tgamelevel.glBeginner,0,0,0); // Initial level
+  // Calcular escala
+  CellWidth := MiniMapPaintBox.Width / FColunas;
+  CellHeight := MiniMapPaintBox.Height / FLinhas;
+  MinPaint:=Tskpaint.Create;
+  MinPaint.AntiAlias:=true;
+  // Desenhar todas as células
+  for I := 0 to FColunas - 1 do
+    for J := 0 to FLinhas - 1 do
+    begin
+      MiniCellRect := RectF(
+        I * CellWidth,
+        J * CellHeight,
+        (I + 1) * CellWidth,
+        (J + 1) * CellHeight
+      );
 
-   THighScoreManager.LoadHighScores;  //Charges all scores by levels
+      // Cores simplificadas
+      if CelulasReveladas[I][J] then
+      Begin
+        minpaint.Color:= $FFFFFFFF; //white tranparent
+        ACanvas.DrawRect(MiniCellRect,minpaint);
+      End
+      else if CelulasMarcadas[I][J] then
+      Begin
+        minpaint.Color:= $FFFF0000; //Red transparent;
+        ACanvas.DrawRect(MiniCellRect, minpaint)
+      End
+      else
+      Begin
+        minpaint.Color:= $96838383; //Gray transparent;
+        ACanvas.DrawRect(MiniCellRect, minpaint);
+      End;
+    end;
+
+  // Desenhar área visível atual
+  ViewportRect := RectF(
+    (ScrollBoxGame.ViewportPosition.X / SkPaintBox.Width) * MiniMapPaintBox.Width,
+    (ScrollBoxGame.ViewportPosition.Y / SkPaintBox.Height) * MiniMapPaintBox.Height,
+    ((ScrollBoxGame.ViewportPosition.X + ScrollBoxGame.Width) / SkPaintBox.Width) * MiniMapPaintBox.Width,
+    ((ScrollBoxGame.ViewportPosition.Y + ScrollBoxGame.Height) / SkPaintBox.Height) * MiniMapPaintBox.Height
+  );
+   minpaint.Color:= TAlphaColors.Red;
+   minpaint.Style:= Tskpaintstyle.Stroke;
+   minpaint.StrokeWidth:=1;
+  ACanvas.DrawRect(ViewportRect,minpaint);
+end;
+
+
+function CarregarShaderRecurso(const NomeRecurso: string):String;
+var ResourceStream: TResourceStream; Adata: TBytes;
+begin
+  // Creates a stream for the resource of type RCDATA
+  ResourceStream := TResourceStream.Create(HInstance, NomeRecurso, RT_RCDATA);
+  try
+    // Read the SVG data
+    SetLength(Adata, ResourceStream.Size);
+    ResourceStream.ReadBuffer(Adata[0], ResourceStream.Size);
+
+    // Convert to UTF-8 string and load into TSkSVG
+    result := TEncoding.UTF8.GetString(Adata);
+  finally ResourceStream.Free;
+  end;
+end;
+
+
+
+
+
+procedure TFormMain.FormCreate(Sender: TObject);
+Var
+  MinesCounter: string;
+begin
+   MinesCounter:=CarregarShaderRecurso('SKNUMBER');
+   NSKeffect:= Tskruntimeeffect.makeforshader(MinesCounter,error);
+   NSKShaderBuilder:=  TSkRuntimeShaderBuilder.Create(NSKeffect);
+   NSKShader:=NSKshaderBuilder.MakeShader;
+
+   NTKeffect:= Tskruntimeeffect.makeforshader(MinesCounter,error);
+   NTKShaderBuilder:=  TSkRuntimeShaderBuilder.Create(NTKeffect);
+   NTKShader:=NTKshaderBuilder.MakeShader;
+
+  laymenu.Position.y:=-203;
+  laymenu.Position.x:= rectbackground.Width -laymenu.Width -10;
+
+
+  ScrollBoxGame.Touch.InteractiveGestures := [TInteractiveGesture.Pan];
+  SetLevel(tgamelevel.glBeginner,0,0,0); // Initial level
+  THighScoreManager.LoadHighScores;  //Charges all scores by levels
 
   ConfigurarAnimacoes;  //Configure initial animations
   NovoJogo;  //load initial game board
 
+
+end;
+
+procedure TFormMain.FormResize(Sender: TObject);
+begin
+RepositionSkPaintBox;
+ MiniMapPaintBox.Redraw; // Atualiza o minimapa
 end;
 
 procedure TFormMain.NovoJogo;
 var I, J: Integer;
+
 begin
+
   FGameOver := False;
   FPrimeiroClique := True;
   MinasRestantes := NUM_MINAS;
@@ -333,8 +697,8 @@ begin
       CelulasMarcadas[I][J] := False;
     end;
 
-  nminas.value := NUM_MINAS;
-  NSeconds.value := 0;
+  NrMinas := NUM_MINAS;
+  NrSeconds := 0;
   Timer.Enabled := False;
   FAnimations.Clear;
   FRevealAnimations.Clear;
@@ -345,6 +709,8 @@ begin
   FGameOver := False;
 
   SkPaintBox.Redraw;
+
+
 end;
 
 
@@ -415,6 +781,7 @@ begin
           Timer.Enabled := False;
         end;
         SkPaintBox.Redraw;
+
       end;
     end;
   end;
@@ -438,21 +805,27 @@ var
   LBaseColor: TAlphaColorF;
   LDarkerColor: TAlphaColor;
 begin
-  FCelulaSize := Min(SkPaintBox.Width / FColunas, SkPaintBox.Height / FLinhas);
+  FCelulaSize := 25; //Min(SkPaintBox.Width / FColunas, SkPaintBox.Height / FLinhas);
 
   // Drawing the bottom of the board
   APaint := TSkPaint.Create;
-  APaint.Color := TAlphaColors.Darkgray;
-  ACanvas.DrawRect(RectF(0, 0, SkPaintBox.Width, SkPaintBox.Height), APaint);
+  APaint.Color := TAlphaColors.black;
+//  ACanvas.DrawRect(RectF(0, 0, SkPaintBox.Width, SkPaintBox.Height), APaint);
+  ACanvas.DrawRect(ADest, APaint); // <-- Isso cria o espaço entre as células
 
   for I := 0 to FColunas - 1 do
     for J := 0 to FLinhas - 1 do begin
       CelulaRect := RectF(I * FCelulaSize, J * FCelulaSize,
         (I + 1) * FCelulaSize, (J + 1) * FCelulaSize);
 
-      // Draw cell with 3D effect
-      DesenharCelula3D(ACanvas, CelulaRect, CelulasReveladas[I][J],
-        CelulasMarcadas[I][J]);
+       // Usar cache da textura para células NÃO reveladas e NÃO marcadas
+      if not CelulasReveladas[I][J] and not CelulasMarcadas[I][J] then begin
+        ACanvas.DrawImage(FCachedCellTexture, CelulaRect.Left, CelulaRect.Top);
+      end
+      else begin
+        // Draw cell with 3D effect
+        DesenharCelula3D(ACanvas, CelulaRect, CelulasReveladas[I][J], CelulasMarcadas[I][J]);
+      end;
 
       // Revealing effect
       if FRevealAnimations.TryGetValue(Point(I, J), LRevealProgress) then begin
@@ -471,7 +844,7 @@ begin
         // 4: LBaseColor := $FFFF0000; // Vermelho
         // 5: LBaseColor := $FF8B0000; // Vermelho escuro
         // 6: LBaseColor := $FF800080; // Roxo
-        // 7: LBaseColor := $FF4B0082; // �ndigo
+        // 7: LBaseColor := $FF4B0082; // Índigo
         // 8: LBaseColor := $FF000000; // Preto
         // else LBaseColor := $FF00FFFF; // Ciano para zero
         // end;
@@ -532,7 +905,15 @@ begin
                 FExplosionAnimation.Duration);
               FExplosionAnimation.Render(ACanvas, LDestRect);
             end
-            else ACanvas.DrawImageRect(FBombStaticImage, LDestRect);
+            else
+            Begin
+              FExplosionAnimation.SeekFrame(FExplosionAnimation.FPS-1);
+              FExplosionAnimation.Render(ACanvas, LDestRect);
+//             FExplosionAnimation.SeekFrametime(FExplosionProgress *
+//                FExplosionAnimation.Duration);
+//              FExplosionAnimation.Render(ACanvas, LDestRect);
+//             ACanvas.DrawImageRect(FBombStaticImage, LDestRect);
+            End;
           end else begin
             // Other cells with mines only show the static image
             ACanvas.DrawImageRect(FBombStaticImage, LDestRect);
@@ -547,47 +928,48 @@ begin
       end;
     end;
 
-  // Draw end-of-game message
-  if LayoutGameOver.Visible then begin
-    LPaint := TSkPaint.Create;
-    LFont := TSkFont.Create(TSkTypeFace.MakeFromName('Impact',
-      TSkFontStyle.Bold), 60);
-
-
-    LBaseColor := TAlphaColorF.Create(FGameEndColor);
-    LDarkerColor := TAlphaColorF.Create(EnsureRange(LBaseColor.R - 0.2, 0.0,
-      1.0), EnsureRange(LBaseColor.G - 0.2, 0.0, 1.0),
-      EnsureRange(LBaseColor.B - 0.2, 0.0, 1.0), LBaseColor.A).ToAlphaColor;
-
-    // Animated gradient effect
-    LPaint.Shader := TSkShader.MakeGradientLinear(PointF(0, 0),
-      PointF(SkPaintBox.Width, SkPaintBox.Height), [FGameEndColor, LDarkerColor,
-      FGameEndColor], [0, 0.5, 1], TSkTileMode.Mirror);
-
-    // Shadow effect
-    LPaint.ImageFilter := TSkImageFilter.MakeDropShadow(5, 5, 8, 8,
-      TAlphaColors.Black);
-
-    LTextWidth := LFont.MeasureText(FGameEndMessage);
-    LFont.GetMetrics(LMetrics);
-    LTextHeight := Abs(LMetrics.Ascent) + Abs(LMetrics.Descent);
-
-    // Entry animation
-    if FGameEndAnimationProgress < 1 then begin
-      FGameEndAnimationProgress := FGameEndAnimationProgress + 0.05;
-      LScale := TMatrix.CreateScaling(FGameEndAnimationProgress,
-        FGameEndAnimationProgress);
-      LTranslate := TMatrix.CreateTranslation
-        ((SkPaintBox.Width - (LTextWidth * FGameEndAnimationProgress)) / 2,
-        (SkPaintBox.Height - (LTextHeight * FGameEndAnimationProgress)) / 2);
-      ACanvas.Concat(LScale * LTranslate);
-    end;
-
-    LTextBlob := TSkTextBlob.MakeFromText(FGameEndMessage, LFont);
-    ACanvas.DrawTextBlob(LTextBlob, (SkPaintBox.Width - LTextWidth) / 2,
-      (SkPaintBox.Height / 2) + (LTextHeight / 2) -
-      Abs(LMetrics.Descent), LPaint);
-  end;
+//  // Draw end-of-game message
+//  if LayoutGameOver.Visible then begin
+//    LPaint := TSkPaint.Create;
+//    LFont := TSkFont.Create(TSkTypeFace.MakeFromName('Impact',
+//      TSkFontStyle.Bold), 60);
+//
+//
+//    LBaseColor := TAlphaColorF.Create(FGameEndColor);
+//    LDarkerColor := TAlphaColorF.Create(EnsureRange(LBaseColor.R - 0.2, 0.0,
+//      1.0), EnsureRange(LBaseColor.G - 0.2, 0.0, 1.0),
+//      EnsureRange(LBaseColor.B - 0.2, 0.0, 1.0), LBaseColor.A).ToAlphaColor;
+//
+//    // Animated gradient effect
+//    LPaint.Shader := TSkShader.MakeGradientLinear(PointF(0, 0),
+//      PointF(SkPaintBox.Width, SkPaintBox.Height), [FGameEndColor, LDarkerColor,
+//      FGameEndColor], [0, 0.5, 1], TSkTileMode.Mirror);
+//
+//    // Shadow effect
+//    LPaint.ImageFilter := TSkImageFilter.MakeDropShadow(5, 5, 8, 8,
+//      TAlphaColors.Black);
+//
+//    LTextWidth := LFont.MeasureText(FGameEndMessage);
+//    LFont.GetMetrics(LMetrics);
+//    LTextHeight := Abs(LMetrics.Ascent) + Abs(LMetrics.Descent);
+//
+//    // Entry animation
+//    if FGameEndAnimationProgress < 1 then begin
+//      FGameEndAnimationProgress := FGameEndAnimationProgress + 0.05;
+//      LScale := TMatrix.CreateScaling(FGameEndAnimationProgress,
+//        FGameEndAnimationProgress);
+//      LTranslate := TMatrix.CreateTranslation
+//        ((SkPaintBox.Width - (LTextWidth * FGameEndAnimationProgress)) / 2,
+//        (SkPaintBox.Height - (LTextHeight * FGameEndAnimationProgress)) / 2);
+//      ACanvas.Concat(LScale * LTranslate);
+//    end;
+//
+//    LTextBlob := TSkTextBlob.MakeFromText(FGameEndMessage, LFont);
+//    ACanvas.DrawTextBlob(LTextBlob, (SkPaintBox.Width - LTextWidth) / 2,
+//      (SkPaintBox.Height / 2) + (LTextHeight / 2) -
+//      Abs(LMetrics.Descent), LPaint);
+//  end;
+  MiniMapPaintBox.Redraw;
 end;
 
 // Auxiliary procedure for safe initialization of mines
@@ -612,11 +994,51 @@ end;
 
 procedure TFormMain.SkPaintBoxMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Single);
+ // var
+ //   LScrollPos: TPointF;
 begin
+ if laymenu.Tag=1 then
+ Begin
+ FloatAnimationMenu.StartValue:=4;
+ FloatAnimationMenu.StopValue:= -204;
+ FloatAnimationMenu.Start;
+    laymenu.Tag:=0;
+ End;
+
+  FIsScrolling := False;
+  FLastMousePos := PointF(X, Y); // Guardar posição inicial
+
+//  LScrollPos := PointF(ScrollBoxGame.ViewportPosition.X, ScrollBoxGame.ViewportPosition.Y);
   ClickInterval := 0;
   TimerLongtap.Enabled := True;
+  //TPX :=  X+LScrollPos.X-20; // Ajustar coordenadas com o scroll
+  //TPY :=  Y+LScrollPos.Y-20;
   TPX := X; // Stores current X coordinate
   TPY := Y; // Stores current Y coordinate
+end;
+
+procedure TFormMain.SkPaintBoxMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Single);
+var
+  Delta: TPointF;
+begin
+
+  if (ssLeft in Shift) and (not FGameOver) then
+  begin
+    Delta := tPointF.Create(X - FLastMousePos.X, Y - FLastMousePos.Y);
+
+    // Se o movimento for significativo, ativar rolagem
+    if (Abs(Delta.X) > 5) or (Abs(Delta.Y) > 5) then
+    begin
+      FIsScrolling := True;
+      TimerLongtap.Enabled := False;
+      ScrollBoxGame.ViewportPosition := PointF(
+        ScrollBoxGame.ViewportPosition.X - Delta.X,
+        ScrollBoxGame.ViewportPosition.Y - Delta.Y
+      );
+    end;
+  end;
+
 end;
 
 procedure TFormMain.ManualLongTap(X, Y: Single);
@@ -644,7 +1066,7 @@ begin
     CelulasMarcadas[CelX][CelY] := not CelulasMarcadas[CelX][CelY];
     MinasRestantes := MinasRestantes +
       IfThen(CelulasMarcadas[CelX][CelY], -1, 1);
-    nminas.value := MinasRestantes;
+    NrMinas := MinasRestantes;
 
   end;
 
@@ -698,65 +1120,148 @@ procedure TFormMain.SkPaintBoxMouseUp(Sender: TObject; Button: TMouseButton;
 var CelX, CelY: Integer; LCelula: TPoint;
 begin
 {$IFDEF ANDROID}
+if not FIsScrolling then
+  begin
   if ClickInterval < LONG_TIME then begin
     TimerLongtap.Enabled := False;
     ClickInterval := 0;
     ManualTap(Sender, X, Y); // 'ListBox Short Touch..!!');
   end;
+ end;
 {$ENDIF}
 {$IFDEF MSWINDOWS}
-  if FGameOver then Exit;
+if not FIsScrolling then
+  begin
+    TPX := X + ScrollBoxGame.ViewportPosition.X;
+    TPY := Y + ScrollBoxGame.ViewportPosition.Y;
 
-  CelX := Trunc(X / FCelulaSize);
-  CelY := Trunc(Y / FCelulaSize);
+    if FGameOver then Exit;
 
-  if (CelX < 0) or (CelX >= FColunas) or (CelY < 0) or (CelY >= FLinhas) then
-      Exit;
+    CelX := Trunc(X / FCelulaSize);
+    CelY := Trunc(Y / FCelulaSize);
 
-  if Button = TMouseButton.mbRight then begin
-    Tsoundmanager.PlaySound('dropflag');
-    LCelula := Point(CelX, CelY);
-    if CelulasMarcadas[CelX][CelY] then begin
-      // Remove animation
-      FAnimations.Remove(LCelula);
-    end else begin
-      // Start animation
-      FAnimations.AddOrSetValue(LCelula, 0);
-    end;
-    if not CelulasReveladas[CelX][CelY] then begin
-      CelulasMarcadas[CelX][CelY] := not CelulasMarcadas[CelX][CelY];
-      MinasRestantes := MinasRestantes +
-        IfThen(CelulasMarcadas[CelX][CelY], -1, 1);
-      nminas.value := MinasRestantes;
-      SkPaintBox.Redraw;
-    end;
-  end else if Button = TMouseButton.mbLeft then begin
+    if (CelX < 0) or (CelX >= FColunas) or (CelY < 0) or (CelY >= FLinhas) then
+        Exit;
 
-    if CelulasMarcadas[CelX][CelY] then Exit;
-
-    if FPrimeiroClique then begin
-      InicializarMinas(CelX, CelY);
-      FTempoInicio := Now;
-      Timer.Enabled := True;
-      FPrimeiroClique := False;
-    end;
-
-    if MinasArray[CelX][CelY] then begin
-      Tsoundmanager.PlaySound('explosion');
-      FCelulaExplosao := Point(CelX, CelY);
-      MostrarTodasMinas;
-    end else begin
-      Tsoundmanager.PlaySound('click');
-      RevelarCelula(CelX, CelY);
-      if VerificarVitoria then begin
-        FGameOver := True;
-        Timer.Enabled := False;
+    if Button = TMouseButton.mbRight then begin
+      Tsoundmanager.PlaySound('dropflag');
+      LCelula := Point(CelX, CelY);
+      if CelulasMarcadas[CelX][CelY] then begin
+        // Remove animation
+        FAnimations.Remove(LCelula);
+      end else begin
+        // Start animation
+        FAnimations.AddOrSetValue(LCelula, 0);
       end;
-    end;
-    SkPaintBox.Redraw;
+      if not CelulasReveladas[CelX][CelY] then begin
+        CelulasMarcadas[CelX][CelY] := not CelulasMarcadas[CelX][CelY];
+        MinasRestantes := MinasRestantes +
+          IfThen(CelulasMarcadas[CelX][CelY], -1, 1);
+        NrMinas := MinasRestantes;
+        SkPaintBox.Redraw;
+      end;
+  end
+  else
+  if Button = TMouseButton.mbLeft then
+     begin
+
+      if CelulasMarcadas[CelX][CelY] then Exit;
+
+      if FPrimeiroClique then begin
+        InicializarMinas(CelX, CelY);
+        FTempoInicio := Now;
+        Timer.Enabled := True;
+        FPrimeiroClique := False;
+      end;
+
+      if MinasArray[CelX][CelY] then begin
+        Tsoundmanager.PlaySound('explosion');
+        FCelulaExplosao := Point(CelX, CelY);
+        MostrarTodasMinas;
+      end else begin
+        Tsoundmanager.PlaySound('click');
+        RevelarCelula(CelX, CelY);
+        if VerificarVitoria then begin
+          FGameOver := True;
+          Timer.Enabled := False;
+        end;
+      end;
+      SkPaintBox.Redraw;
+     end;
   end;
+
+{$ENDIF}
+FIsScrolling := False;
+end;
+
+procedure TFormMain.SkpNrMinasDraw(ASender: TObject; const ACanvas: ISkCanvas;
+  const ADest: TRectF; const AOpacity: Single);
+Var
+ Lpaint: ISKpaint;
+begin
+Lpaint:= Tskpaint.Create;
+Lpaint.AntiAlias:=True;
+DrawMines(Acanvas, Adest,Lpaint);
+
+end;
+
+procedure TFormMain.SkpNrSecondsDraw(ASender: TObject; const ACanvas: ISkCanvas;
+  const ADest: TRectF; const AOpacity: Single);
+Var
+ Lpaint: ISKpaint;
+begin
+Lpaint:= Tskpaint.Create;
+Lpaint.AntiAlias:=True;
+Drawclock(Acanvas, Adest,Lpaint);
+end;
+
+procedure TFormMain.IMgLevelClick(Sender: TObject);
+begin
+{$IFDEF MSWINDOWS}
+  IMgLevelTap(sender,Tpointf.create(0,0));
 {$ENDIF}
 end;
+
+procedure TFormMain.IMgLevelTap(Sender: TObject; const Point: TPointF);
+var
+  FormLevel: TFormLevelSelect;
+begin
+  FormLevel := TFormLevelSelect.Create(nil);
+  try
+    FormLevel.OnLevelSelected := HandleLevelSelected; //callback
+    FormLevel.edtColunas.Value:= FColunas;
+    FormLevel.edtlinhas.Value:=  FLinhas;
+    FormLevel.edtminas.Value:=  NUM_MINAS;
+    {$IFDEF MSWINDOWS}
+    FormLevel.ShowModal;
+    {$ENDIF}
+    {$IFDEF ANDROID}
+    FormLevel.ShowLevels(Self);
+    {$ENDIF}
+  except
+    FormLevel.Free;
+  end;
+
+end;
+
+procedure TFormMain.imgsetabtnmenuClick(Sender: TObject);
+begin
+
+ if laymenu.Tag=1 then
+ Begin
+ FloatAnimationMenu.StartValue:=4;
+ FloatAnimationMenu.StopValue:= -204;
+ FloatAnimationMenu.Start;
+    laymenu.Tag:=0;
+ End
+ else
+ Begin
+  FloatAnimationMenu.StartValue:=-204;
+  FloatAnimationMenu.StopValue:= 4;
+  FloatAnimationMenu.Start;
+  laymenu.Tag:=1;
+ End;
+ end;
 
 procedure TFormMain.RevelarCelula(X, Y: Integer);
 begin
@@ -778,6 +1283,7 @@ begin
     RevelarCelula(X + 1, Y);
     RevelarCelula(X + 1, Y + 1);
   end;
+  SkPaintBox.InvalidateRect(RectF(X * FCelulaSize, Y * FCelulaSize, (X+1)*FCelulaSize, (Y+1)*FCelulaSize));
 end;
 
 function TFormMain.ContarBandeirasVizinhas(X, Y: Integer): Integer;
@@ -835,7 +1341,8 @@ end;
 
 procedure TFormMain.TimerTimer(Sender: TObject);
 begin
-  if not FGameOver then NSeconds.value := SecondsBetween(Now, FTempoInicio)
+  if not FGameOver then
+    NrSeconds := SecondsBetween(Now, FTempoInicio)
   else // if FExplosionProgress >= 1 then
   begin
     Timer.Enabled := False;
@@ -937,9 +1444,12 @@ begin
   Result := True;
   if Result then begin
     Tsoundmanager.PlaySound('venceu');
-    FGameEndMessage := 'VIT�RIA!';
+    FGameEndMessage := 'YOU WIN !';
     FGameEndColor := $FF44FF44;
     FGameEndAnimationProgress := 0;
+
+    sklabelgameover.Words[0].Text:= FGameEndMessage;
+    sklabelgameover.TextSettings.FontColor:= FGameEndColor;
     LayoutGameOver.Visible := True;
     FloatAnimationPulse.Enabled := True;
 
@@ -964,9 +1474,11 @@ var
   I, J: Integer;
 begin
   FGameOver := True;
-  FGameEndMessage := 'YOU LOOSE';
+  FGameEndMessage := 'YOU LOOSE !';
   FGameEndColor := $FFFF4444;
   FGameEndAnimationProgress := 0;
+  sklabelgameover.Words[0].Text:= FGameEndMessage;
+  sklabelgameover.TextSettings.FontColor:= FGameEndColor;
   LayoutGameOver.Visible := True;
   FloatAnimationPulse.Enabled := True;
 
@@ -1030,6 +1542,7 @@ end;
 procedure TFormMain.HandleLevelSelected(Sender: TObject; ALevel: TGameLevel;
   Cols, Rows, Mines: Integer);
 begin
+
   if ALevel = glCustom then begin
     SetLevel(ALevel,Cols,Rows,Mines);
   end else begin
@@ -1037,44 +1550,31 @@ begin
   end;
   NovoJogo;
   TFormLevelSelect(Sender).close;
+ ScrollBoxGame.InvalidateContentSize;
 end;
 
-procedure TFormMain.BtnNewGameClick(Sender: TObject);
-var
-  FormLevel: TFormLevelSelect;
+procedure TFormMain.btnnewLevelClick(Sender: TObject);
 begin
-  FormLevel := TFormLevelSelect.Create(nil);
-  try
-    FormLevel.OnLevelSelected := HandleLevelSelected; //callback
-    FormLevel.edtColunas.Value:= FColunas;
-    FormLevel.edtlinhas.Value:=  FLinhas;
-    FormLevel.edtminas.Value:=  NUM_MINAS;
-    {$IFDEF MSWINDOWS}
-    FormLevel.ShowModal;
-    {$ENDIF}
-    {$IFDEF ANDROID}
-    FormLevel.ShowLevels(Self);
-    {$ENDIF}
-  except
-    FormLevel.Free;
-  end;
+{$IFDEF MSWINDOWS}
+ IMgLevelTap(sender,TPointf.create(0,0));
+{$ENDIF}
 end;
 
-procedure TFormMain.BtnNewGameMouseDown(Sender: TObject; Button: TMouseButton;
-Shift: TShiftState; X, Y: Single);
+procedure TFormMain.btnnewLevelTap(Sender: TObject; const Point: TPointF);
 begin
-  CarregarSVGDoRecurso(BtnNewGame, 'BTNGREEN');
+  IMgLevelTap(sender,Point);
 end;
 
-procedure TFormMain.BtnNewGameMouseLeave(Sender: TObject);
+procedure TFormMain.btnrepeateClick(Sender: TObject);
 begin
-  CarregarSVGDoRecurso(BtnNewGame, 'BTNBLACK');
+{$IFDEF MSWINDOWS}
+btnrepeateTap(self,Tpointf.Create(0,0));
+{$ENDIF}
 end;
 
-procedure TFormMain.BtnNewGameMouseUp(Sender: TObject; Button: TMouseButton;
-Shift: TShiftState; X, Y: Single);
+procedure TFormMain.btnrepeateTap(Sender: TObject; const Point: TPointF);
 begin
-  CarregarSVGDoRecurso(BtnNewGame, 'BTNBLACK');
+novojogo;
 end;
 
 procedure TFormMain.DesenharTextoCentralizado(const ACanvas: ISkCanvas;
