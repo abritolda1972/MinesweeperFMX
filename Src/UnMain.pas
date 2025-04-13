@@ -663,7 +663,7 @@ begin
     glBeginner: begin
         FColunas := 8;
         FLinhas := 8;
-        NUM_MINAS := 3;
+        NUM_MINAS := 10;
       end; // 10 mines
     glIntermediate: begin
         FColunas := 12;
