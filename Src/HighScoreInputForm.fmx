@@ -23,6 +23,7 @@ object FormHighScoreInput: TFormHighScoreInput
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       Align = Top
       TabOrder = 0
+      TextSettings.FontColor = claGold
       Position.X = 20.000000000000000000
       Position.Y = 36.000000000000000000
       Margins.Left = 20.000000000000000000
@@ -31,6 +32,7 @@ object FormHighScoreInput: TFormHighScoreInput
       Size.Width = 227.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
+      StyledSettings = [Family, Size, Style]
     end
     object SkLabel1: TSkLabel
       Align = Top

@@ -67,6 +67,8 @@ end;
 
 procedure TFormHighScoreInput.BtnSaveClick(Sender: TObject);
 begin
+if Length(EditName.Text.Trim) <=0 then
+   EditName.Text:='Player';
 if Assigned(FCallback) then
     FCallback(EditName.Text.Trim, True);
   Close;

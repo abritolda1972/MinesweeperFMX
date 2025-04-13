@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="Gradiente_sem_nome_7" data-name="Gradiente sem nome 7" x1="50" y1="100" x2="50" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#eb8d41"/>
+      <stop offset="1" stop-color="#f8bb57"/>
+    </linearGradient>
+    <linearGradient id="Gradiente_sem_nome_12" data-name="Gradiente sem nome 12" x1="50" y1="8" x2="50" y2="92" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e57737"/>
+      <stop offset="1" stop-color="#f8bb57"/>
+    </linearGradient>
+  </defs>
+  <!-- Generator: Adobe Illustrator 28.7.1, SVG Export Plug-In . SVG Version: 1.2.0 Build 142)  -->
+  <g>
+    <g id="Camada_1">
+      <g>
+        <circle cx="50" cy="50" r="50" fill="url(#Gradiente_sem_nome_7)"/>
+        <circle cx="50" cy="50" r="42" fill="url(#Gradiente_sem_nome_12)" stroke="#fbb81e" stroke-miterlimit="10" stroke-width=".5"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 20 50">
+  <defs>
+    <linearGradient id="Gradiente_sem_nome" data-name="Gradiente sem nome" x1="10" y1="37.2" x2="10" y2="22.2" gradientTransform="translate(-17 15) rotate(90) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7f6000"/>
+      <stop offset="1" stop-color="#553600"/>
+    </linearGradient>
+  </defs>
+  <!-- Generator: Adobe Illustrator 28.7.1, SVG Export Plug-In . SVG Version: 1.2.0 Build 142)  -->
+  <g>
+    <g id="Camada_1">
+      <g id="Camada_1-2" data-name="Camada_1">
+        <rect x="0" width="20" height="50" fill="url(#Gradiente_sem_nome)"/>
+        <polygon points="4.5 13.8 15.6 25 4.4 37.3 4.5 13.8" fill="#b75f00"/>
+      </g>
+    </g>
+  </g>
+</svg>

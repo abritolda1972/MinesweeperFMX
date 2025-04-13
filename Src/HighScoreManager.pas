@@ -3,8 +3,8 @@ unit HighScoreManager;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Generics.Collections,Generics.Defaults, System.Math,
-  System.IOUtils, UnMain; // UnMain must contain the definition of TGameLevel
+  System.SysUtils, System.Classes, System.Generics.Collections, Generics.Defaults,
+  System.Math, System.IOUtils, System.JSON, System.DateUtils, UnMain, system.TypInfo;
 
 type
   THighScore = record
@@ -18,6 +18,8 @@ type
     class var FHighScores: TDictionary<TGameLevel, TList<THighScore>>;
     class constructor Create;
     class destructor Destroy;
+    class function LevelToStr(Level: TGameLevel): string;
+    class function StrToLevel(const Value: string): TGameLevel;
   public
     class procedure LoadHighScores;
     class procedure SaveHighScores;
@@ -29,7 +31,7 @@ type
 implementation
 
 const
-  HIGHSCORES_FILE = 'highscores.dat';
+  HIGHSCORES_FILE = 'highscores.json';
 
 class constructor THighScoreManager.Create;
 var
@@ -49,72 +51,82 @@ begin
   FHighScores.Free;
 end;
 
+class function THighScoreManager.LevelToStr(Level: TGameLevel): string;
+begin
+  Result := GetEnumName(TypeInfo(TGameLevel), Integer(Level));
+end;
+
+class function THighScoreManager.StrToLevel(const Value: string): TGameLevel;
+begin
+  Result := TGameLevel(GetEnumValue(TypeInfo(TGameLevel), Value));
+end;
+
 class procedure THighScoreManager.LoadHighScores;
 var
-  Stream: TStream;
-  Reader: TBinaryReader;
+  JSONRoot: TJSONObject;
   Level: TGameLevel;
-  Count, i: Integer;
+  ScoresArray: TJSONArray;
+  ScoreItem: TJSONValue;
+  ScoreData: TJSONObject;
   Score: THighScore;
   FilePath: string;
+  i: Integer;
 begin
   FilePath := TPath.Combine(TPath.GetDocumentsPath, HIGHSCORES_FILE);
 
-  if TFile.Exists(FilePath) then
-  begin
-    Stream := TFileStream.Create(FilePath, fmOpenRead);
-    try
-      Reader := TBinaryReader.Create(Stream);
-      try
-        for Level := Low(TGameLevel) to High(TGameLevel) do
-        begin
-          Count := Reader.ReadInteger;
-          for i := 0 to Count - 1 do
-          begin
-            Score.PlayerName := Reader.ReadString;
-            Score.Time := Reader.ReadInteger;
-            Score.Date := Reader.ReadDouble;
-            FHighScores[Level].Add(Score);
-          end;
-        end;
-      finally
-        Reader.Free;
+  if not TFile.Exists(FilePath) then Exit;
+
+  JSONRoot := TJSONObject.ParseJSONValue(TFile.ReadAllText(FilePath)) as TJSONObject;
+  try
+    for i := 0 to JSONRoot.Count - 1 do
+    begin
+      Level := StrToLevel(JSONRoot.Pairs[i].JsonString.Value);
+      ScoresArray := JSONRoot.Pairs[i].JsonValue as TJSONArray;
+
+      FHighScores[Level].Clear;
+      for ScoreItem in ScoresArray do
+      begin
+        ScoreData := ScoreItem as TJSONObject;
+        Score.PlayerName := ScoreData.GetValue<string>('PlayerName');
+        Score.Time := ScoreData.GetValue<Integer>('Time');
+        Score.Date := ISO8601ToDate(ScoreData.GetValue<string>('Date'));
+        FHighScores[Level].Add(Score);
       end;
-    finally
-      Stream.Free;
     end;
+  finally
+    JSONRoot.Free;
   end;
 end;
 
 class procedure THighScoreManager.SaveHighScores;
 var
-  Stream: TStream;
-  Writer: TBinaryWriter;
+  JSONRoot: TJSONObject;
   Level: TGameLevel;
+  LevelScores: TJSONArray;
   Score: THighScore;
   FilePath: string;
 begin
-  FilePath := TPath.Combine(TPath.GetDocumentsPath, HIGHSCORES_FILE);
-
-  Stream := TFileStream.Create(FilePath, fmCreate);
+  JSONRoot := TJSONObject.Create;
   try
-    Writer := TBinaryWriter.Create(Stream);
-    try
-      for Level := Low(TGameLevel) to High(TGameLevel) do
+    for Level in FHighScores.Keys do
+    begin
+      LevelScores := TJSONArray.Create;
+      for Score in FHighScores[Level] do
       begin
-        Writer.Write(FHighScores[Level].Count);
-        for Score in FHighScores[Level] do
-        begin
-          Writer.Write(Score.PlayerName);
-          Writer.Write(Score.Time);
-          Writer.Write(Score.Date);
-        end;
+        LevelScores.Add(
+          TJSONObject.Create
+            .AddPair('PlayerName', Score.PlayerName)
+            .AddPair('Time', TJSONNumber.Create(Score.Time))
+            .AddPair('Date', DateToISO8601(Score.Date))
+        );
       end;
-    finally
-      Writer.Free;
+      JSONRoot.AddPair(LevelToStr(Level), LevelScores);
     end;
+
+    FilePath := TPath.Combine(TPath.GetDocumentsPath, HIGHSCORES_FILE);
+    TFile.WriteAllText(FilePath, JSONRoot.Format(2));
   finally
-    Stream.Free;
+    JSONRoot.Free;
   end;
 end;
 
@@ -142,7 +154,6 @@ begin
     )
   );
 
-  // Keep only top 10
   while FHighScores[Level].Count > 10 do
     FHighScores[Level].Delete(10);
 end;

@@ -13,7 +13,8 @@ uses
   HighScoreInputForm in 'HighScoreInputForm.pas' {FormHighScoreInput},
   HighScoreTableForm in 'HighScoreTableForm.pas' {FormHighScoreTable},
   LevelSelect in 'LevelSelect.pas' {FormLevelSelect},
-  GameInstructions in 'GameInstructions.pas' {FormInstructions};
+  GameInstructions in 'GameInstructions.pas' {FormInstructions},
+  About in 'About.pas' {FrmAbout};
 
 {$R *.res}
 
@@ -22,10 +23,10 @@ begin
  // ReportMemoryLeaksOnShutdown := True;
   {$ENDIF}
   GlobalUseSkia := True;
+  GlobalSkiaBitmapsInParallel:= true;
   GlobalUseSkiaRasterWhenAvailable:=False;
   GlobalUseVulkan:=True;
   Application.Initialize;
-  Application.FormFactor.Orientations := [TFormOrientation.Portrait];
   Application.CreateForm(TFormMain, FormMain);
   Application.Run;
 end.

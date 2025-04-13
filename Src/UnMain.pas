@@ -36,7 +36,7 @@ type
     RectBackground: TRectangle;
     ShadowEffect1: TShadowEffect;
     imgLogoGame: TSkSvg;
-    Rectangle2: TRectangle;
+    recttop: TRectangle;
     TimerLongtap: TTimer;
     LayoutGameOver: TLayout;
     RectangleOverlay: TRectangle;
@@ -77,6 +77,34 @@ type
     SkLabel1: TSkLabel;
     Imgbombnumber: TSkSvg;
     SkSvg2: TSkSvg;
+    LayLoadGame: TLayout;
+    ImgLoadGame: TSkSvg;
+    SkLabel6: TSkLabel;
+    LaySaveGame: TLayout;
+    ImgSaveGame: TSkSvg;
+    SkLabel7: TSkLabel;
+    LayBeginGame: TLayout;
+    SkSvg6: TSkSvg;
+    SkLabel8: TSkLabel;
+    SkLabel9: TSkLabel;
+    rectfundoiniciojogo: TRectangle;
+    Rectangle1: TRectangle;
+    InnerGlowEffect1: TInnerGlowEffect;
+    imgbuttonstart: TSkSvg;
+    SkLabel10: TSkLabel;
+    GlowEffect1: TGlowEffect;
+    FloatAnimationStart: TFloatAnimation;
+    LayMenuZoom: TLayout;
+    imgMenuZoom: TSkSvg;
+    imgFundoMenuZoom: TSkSvg;
+    SkLabel11: TSkLabel;
+    Layout3: TLayout;
+    imgcelllarger: TSkSvg;
+    SkLabel12: TSkLabel;
+    Layout4: TLayout;
+    imgcellsmall: TSkSvg;
+    SkLabel13: TSkLabel;
+    FloatAnimationzoom: TFloatAnimation;
     procedure FormCreate(Sender: TObject);
     procedure SkPaintBoxMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Single);
@@ -111,6 +139,24 @@ type
     procedure IMgLevelTap(Sender: TObject; const Point: TPointF);
     procedure btnnewLevelTap(Sender: TObject; const Point: TPointF);
     procedure btnnewLevelClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure SkSvg3Tap(Sender: TObject; const Point: TPointF);
+    procedure SkSvg3Click(Sender: TObject);
+    procedure ImgSaveGameTap(Sender: TObject; const Point: TPointF);
+    procedure ImgLoadGameTap(Sender: TObject; const Point: TPointF);
+    procedure ImgSaveGameClick(Sender: TObject);
+    procedure ImgLoadGameClick(Sender: TObject);
+    procedure imgbuttonstartTap(Sender: TObject; const Point: TPointF);
+    procedure imgbuttonstartClick(Sender: TObject);
+    procedure FloatAnimationStartFinish(Sender: TObject);
+    procedure FormGesture(Sender: TObject; const EventInfo: TGestureEventInfo; var Handled: Boolean);
+    procedure imgMenuZoomTap(Sender: TObject; const Point: TPointF);
+    procedure FloatAnimationzoomFinish(Sender: TObject);
+    procedure imgMenuZoomClick(Sender: TObject);
+    procedure imgcellsmallTap(Sender: TObject; const Point: TPointF);
+    procedure imgcelllargerTap(Sender: TObject; const Point: TPointF);
+    procedure imgcelllargerClick(Sender: TObject);
+    procedure imgcellsmallClick(Sender: TObject);
   private
     NUM_MINAS: Integer;
     FCelulaSize: Single;
@@ -163,6 +209,7 @@ type
     NTKShader: Iskshader;
     FNrSeconds: Integer;
 
+    FLastZoomDistance: Integer;
 
     procedure ManualTap(ASender: TObject; X, Y: Single);
     procedure ManualLongTap(X, Y: Single);
@@ -191,7 +238,13 @@ type
     procedure SetNrMinas(const Value: Integer);
     procedure DrawMines(Acanvas: ISKCanvas; Adest: TRectF; Apaint: Iskpaint);
     procedure SetNrSeconds(const Value: Integer);
-
+    procedure SalvarJogo(const NomeArquivo: string);
+    procedure CarregarJogo(const NomeArquivo: string);
+    procedure CloseMenu;
+    procedure CloseAnimationStart;
+    procedure BeginAnimationStart;
+    procedure UpdateZoom;
+    procedure CloseMenuZoom;
   public
     { Public declarations }
     property NrMinas: Integer read FNrMinas write SetNrMinas default 0;
@@ -207,7 +260,7 @@ implementation
 {$R *.fmx}
 
 uses HighScoreInputForm, HighScoreManager, HighScoreTableForm, LevelSelect,
-  GameInstructions;
+  GameInstructions, About;
 
 
 Procedure TFormMain.DrawMines(Acanvas: ISKCanvas; Adest: TRectF; Apaint: Iskpaint);
@@ -264,60 +317,142 @@ Begin
 End;
 End;
 
+//procedure TFormMain.RepositionSkPaintBox;
+//var
+//  ScrollBoxContent: TControl;
+//  RequiredWidth, RequiredHeight: Single;
+//begin
+//  ScrollBoxContent := ScrollBoxGame.Content;
+//  // Sets the minimum size of the Content (SkPaintBox + margins)
+//  RequiredWidth := SkPaintBox.Width + 40; // 20px each side
+//  RequiredHeight := SkPaintBox.Height + 40;
+//
+//  // Forces the size of the Content (even if SkPaintBox is small)
+//  ScrollBoxContent.Width := RequiredWidth;
+//  ScrollBoxContent.Height := RequiredHeight;
+//
+//  // Updates the background rectangle
+//  rectsizescroll.Position.X := 0;
+//  rectsizescroll.Position.Y := 0;
+//  rectsizescroll.Width := RequiredWidth;
+//  rectsizescroll.Height := RequiredHeight;
+//
+//  // Center or position with margins
+//  if (ScrollBoxGame.Width >= RequiredWidth) and (ScrollBoxGame.Height >= RequiredHeight) then
+//  begin
+//    // Center the field
+//    rectsizescroll.Position.X := (ScrollBoxGame.Width - SkPaintBox.Width) / 2-20;
+//    rectsizescroll.Position.Y := (ScrollBoxGame.Height - SkPaintBox.Height) / 2-20;
+//     if (ScrollBoxGame.Width >= RequiredWidth) then
+//
+//       SkPaintBox.Position.X := 20;
+//      SkPaintBox.Position.Y := 20;
+//      MiniMapPaintBox.Visible:=false;
+//  end
+//  else
+//  begin
+//
+//    // Position top left corner with margins
+//    SkPaintBox.Position.X := (rectsizescroll.Width - SkPaintBox.Width) / 2;
+//    SkPaintBox.Position.Y := (rectsizescroll.Height - SkPaintBox.Height) / 2;
+//
+//  //  rectsizescroll.Position.Y := (ScrollBoxGame.Height - SkPaintBox.Height) / 2-20;
+//    MiniMapPaintBox.Visible:=True;
+//  end;
+//
+//  // Updateo ScrollBox
+//  ScrollBoxGame.InvalidateContentSize;
+//end;
+
+
 procedure TFormMain.RepositionSkPaintBox;
 var
   ScrollBoxContent: TControl;
   RequiredWidth, RequiredHeight: Single;
+  LProportionalX, LProportionalY: Single;
 begin
+  // Salva a posição proporcional atual do ScrollBox
+  if (SkPaintBox.Width > 0) and (SkPaintBox.Height > 0) then
+  begin
+    LProportionalX := ScrollBoxGame.ViewportPosition.X / SkPaintBox.Width;
+    LProportionalY := ScrollBoxGame.ViewportPosition.Y / SkPaintBox.Height;
+  end
+  else
+  begin
+    LProportionalX := 0;
+    LProportionalY := 0;
+  end;
+
   ScrollBoxContent := ScrollBoxGame.Content;
-  // Sets the minimum size of the Content (SkPaintBox + margins)
-  RequiredWidth := SkPaintBox.Width + 40; // 20px each side
+
+  // Define o tamanho necessário incluindo margens
+  RequiredWidth := SkPaintBox.Width + 40;  // 20px de margem em cada lado
   RequiredHeight := SkPaintBox.Height + 40;
 
-  // Forces the size of the Content (even if SkPaintBox is small)
+  // Aplica o novo tamanho ao conteúdo
   ScrollBoxContent.Width := RequiredWidth;
   ScrollBoxContent.Height := RequiredHeight;
 
-  // Updates the background rectangle
+  // Atualiza o retângulo de fundo do ScrollBox
   rectsizescroll.Position.X := 0;
   rectsizescroll.Position.Y := 0;
   rectsizescroll.Width := RequiredWidth;
   rectsizescroll.Height := RequiredHeight;
 
-  // Center or position with margins
+  // Centraliza ou ajusta a posição
   if (ScrollBoxGame.Width >= RequiredWidth) and (ScrollBoxGame.Height >= RequiredHeight) then
   begin
-    // Center the field
-    rectsizescroll.Position.X := (ScrollBoxGame.Width - SkPaintBox.Width) / 2-20;
-    rectsizescroll.Position.Y := (ScrollBoxGame.Height - SkPaintBox.Height) / 2-20;
-     if (ScrollBoxGame.Width >= RequiredWidth) then
+    // Modo Centralizado
+    SkPaintBox.Position.X := (RequiredWidth - SkPaintBox.Width) / 2;
+    SkPaintBox.Position.Y := (RequiredHeight - SkPaintBox.Height) / 2;
 
-       SkPaintBox.Position.X := 20;
-      SkPaintBox.Position.Y := 20;
-      MiniMapPaintBox.Visible:=false;
+    rectsizescroll.Position.X := (ScrollBoxGame.Width-RequiredWidth) / 2;
+    rectsizescroll.Position.Y := ( ScrollBoxGame.Height-RequiredWidth) / 2;
+
+
+    MiniMapPaintBox.Visible := False;
   end
   else
   begin
+    // Modo com Scroll
+    if (ScrollBoxGame.Width >= RequiredWidth) then
+    Begin
+      //SkPaintBox.Position.X := 20;
+      rectsizescroll.Position.X := (ScrollBoxGame.Width-RequiredWidth) / 2;
+      SkPaintBox.Position.Y := 20;
+    End
+    else
+    if (ScrollBoxGame.Height >= RequiredHeight) then
+    Begin
+      rectsizescroll.Position.Y := ( ScrollBoxGame.Height-RequiredWidth) / 2;
+      SkPaintBox.Position.X := 20;
+    End
+    else
+    Begin
+      SkPaintBox.Position.X := 20;
+      SkPaintBox.Position.Y := 20;
+    End;
 
-    // Position top left corner with margins
-    SkPaintBox.Position.X := (rectsizescroll.Width - SkPaintBox.Width) / 2;
-    SkPaintBox.Position.Y := (rectsizescroll.Height - SkPaintBox.Height) / 2;
-
-  //  rectsizescroll.Position.Y := (ScrollBoxGame.Height - SkPaintBox.Height) / 2-20;
-    MiniMapPaintBox.Visible:=True;
+    MiniMapPaintBox.Visible := True;
   end;
 
-  // Updateo ScrollBox
-  ScrollBoxGame.InvalidateContentSize;
-end;
+  // Restaura a posição proporcional
+  ScrollBoxGame.ViewportPosition := PointF(
+    LProportionalX * SkPaintBox.Width,
+    LProportionalY * SkPaintBox.Height
+  );
 
+  // Força atualização do ScrollBox
+  ScrollBoxGame.InvalidateContentSize;
+  MiniMapPaintBox.Redraw;
+end;
 
 procedure TFormMain.PreRenderCellTexture;
 var
   LSurface: ISkSurface;
   LCelulaSize: Single;
 begin
-  LCelulaSize := 25; // Tamanho base da célula (ajuste conforme seu cálculo de FCelulaSize)
+  LCelulaSize := FCelulaSize;
   LSurface := TSkSurface.MakeRaster(Trunc(LCelulaSize), Trunc(LCelulaSize));
   LSurface.Canvas.Clear(TAlphaColors.Null);
   DesenharCelula3D(LSurface.Canvas, RectF(0, 0, LCelulaSize, LCelulaSize), False, False);
@@ -451,89 +586,123 @@ begin
   if FRevealAnimations.Count > 0 then SkPaintBox.Redraw;
 end;
 
+procedure TFormMain.SalvarJogo(const NomeArquivo: string);
+var
+  Stream: TFileStream;
+  I, J: Integer;
+  TempByte: Byte;
+  TempoDecorrido: Integer;
+  LevelInt: Integer;
+begin
+  Stream := TFileStream.Create(NomeArquivo, fmCreate);
+  try
+    // Gravar versão do formato (para controle)
+    Stream.WriteBuffer(AnsiString('MSV1'), 4);
+
+    // Gravar nível atual
+    LevelInt := Ord(FGameLevel);
+    Stream.WriteBuffer(LevelInt, SizeOf(LevelInt));
+
+    // Gravar dimensões do campo
+    Stream.WriteBuffer(FColunas, SizeOf(FColunas));
+    Stream.WriteBuffer(FLinhas, SizeOf(FLinhas));
+    Stream.WriteBuffer(NUM_MINAS, SizeOf(NUM_MINAS));
+
+    // Gravar matrizes
+    for I := 0 to FColunas - 1 do
+      for J := 0 to FLinhas - 1 do
+      begin
+        TempByte := Ord(MinasArray[I][J]);
+        Stream.WriteBuffer(TempByte, SizeOf(TempByte));
+      end;
+
+    for I := 0 to FColunas - 1 do
+      for J := 0 to FLinhas - 1 do
+      begin
+        TempByte := Ord(CelulasReveladas[I][J]);
+        Stream.WriteBuffer(TempByte, SizeOf(TempByte));
+      end;
+
+    for I := 0 to FColunas - 1 do
+      for J := 0 to FLinhas - 1 do
+      begin
+        TempByte := Ord(CelulasMarcadas[I][J]);
+        Stream.WriteBuffer(TempByte, SizeOf(TempByte));
+      end;
+
+    // Gravar estado do jogo
+    Stream.WriteBuffer(FPrimeiroClique, SizeOf(FPrimeiroClique));
+    Stream.WriteBuffer(FGameOver, SizeOf(FGameOver));
+    Stream.WriteBuffer(MinasRestantes, SizeOf(MinasRestantes));
+
+    // Gravar tempo decorrido
+    if not FPrimeiroClique then
+      TempoDecorrido := SecondsBetween(Now, FTempoInicio)
+    else
+      TempoDecorrido := 0;
+
+    Stream.WriteBuffer(TempoDecorrido, SizeOf(TempoDecorrido));
+
+  finally
+    Stream.Free;
+  end;
+end;
+
 procedure TFormMain.ScrollBoxGameViewportPositionChange(Sender: TObject;
   const OldViewportPosition, NewViewportPosition: TPointF;
   const ContentSizeChanged: Boolean);
 begin
-MiniMapPaintBox.Redraw;
+   MiniMapPaintBox.Redraw;
 end;
 
 procedure TFormMain.SetLevel(ALevel: TGameLevel; Acolumns, ALines, Amines: Integer);
 begin
 
-  FGameLevel := ALevel;
-  case ALevel of
-{$IFDEF MSWINDOWS}
-  glBeginner: begin
-      FColunas := 8;
-      FLinhas := 8;
-      NUM_MINAS := 10;
-    end; // 10 mines
-  glIntermediate: begin
-      FColunas := 12;
-      FLinhas := 12;
-      NUM_MINAS := 30;
-    end; // 20 mines
-  glExpert: begin
-      FColunas := 16;
-      FLinhas := 16;
-      NUM_MINAS := 80;
-    end; // 60 mines
-  glAdvanced: begin
-      FColunas := 30;
-      FLinhas := 30;
-      NUM_MINAS := 250;
-    end; // 100 mines
-  glCustom : begin
-      FColunas := Acolumns;
-      FLinhas := ALines;
-      NUM_MINAS := Amines;
+    FGameLevel := ALevel;
+    case ALevel of
+    glBeginner: begin
+        FColunas := 8;
+        FLinhas := 8;
+        NUM_MINAS := 3;
+      end; // 10 mines
+    glIntermediate: begin
+        FColunas := 12;
+        FLinhas := 12;
+        NUM_MINAS := 20;
+      end; // 20 mines
+    glExpert: begin
+        FColunas := 16;
+        FLinhas := 16;
+        NUM_MINAS := 60;
+      end; // ~62 mines
+    glAdvanced: begin
+        FColunas := 30;
+        FLinhas := 30;
+        NUM_MINAS := 250;
+      end;
+    glCustom : begin
+         FColunas := Acolumns;
+        FLinhas := ALines;
+        NUM_MINAS := Amines;
+      end;
     end;
-{$ENDIF}
-{$IFDEF ANDROID}
-  glBeginner: begin
-      FColunas := 8;
-      FLinhas := 8;
-      NUM_MINAS := 10;
-    end; // 10 mines
-  glIntermediate: begin
-      FColunas := 12;
-      FLinhas := 12;
-      NUM_MINAS := 20;
-    end; // 20 mines
-  glExpert: begin
-      FColunas := 16;
-      FLinhas := 16;
-      NUM_MINAS := 60;
-    end; // ~62 mines
-  glAdvanced: begin
-      FColunas := 30;
-      FLinhas := 30;
-      NUM_MINAS := 250;
-    end;
-  glCustom : begin
-       FColunas := Acolumns;
-      FLinhas := ALines;
-      NUM_MINAS := Amines;
-    end;
-{$ENDIF}
-  end;
 
-  // Adjust PaintBox size
-  SkPaintBox.Width := FColunas * 25; // Width based on columns
-  SkPaintBox.Height := FLinhas * 25; // Height based on lines
+    // Adjust PaintBox size
+    SkPaintBox.Width := FColunas * FCelulaSize; // Width based on columns
+    SkPaintBox.Height := FLinhas * FCelulaSize; // Height based on lines
 
 
-//{$IFDEF MSWINDOWS}
-//  FormMain.Width := floor(RectFundo.Width + 40);
-//  FormMain.Height := floor(RectFundo.Height + Layout1.Height + 90);
-//{$ENDIF}
- SkPaintBox.Position.X:=20;
- SkPaintBox.Position.y:=20;
+  //{$IFDEF MSWINDOWS}
+  //  FormMain.Width := floor(RectFundo.Width + 40);
+  //  FormMain.Height := floor(RectFundo.Height + Layout1.Height + 90);
+  //{$ENDIF}
+   SkPaintBox.Position.X:=20;
+   SkPaintBox.Position.y:=20;
 
- RepositionSkPaintBox; // ⬅️ Novo código
+   RepositionSkPaintBox; // ⬅️ Novo código
 
- PreRenderCellTexture;
+   PreRenderCellTexture;
+
 end;
 
 procedure TFormMain.SetNrSeconds(const Value: Integer);
@@ -559,6 +728,24 @@ Begin
  imgsetabtnmenu.RotationAngle:=0;
 end;
 
+end;
+
+procedure TFormMain.FloatAnimationStartFinish(Sender: TObject);
+begin
+if LayBeginGame.Position.y <0 then
+  LayBeginGame.Visible:=False;
+end;
+
+procedure TFormMain.FloatAnimationzoomFinish(Sender: TObject);
+begin
+  if laymenuzoom.Tag=1 then
+  Begin
+    imgMenuZoom.RotationAngle:=180;
+  end
+  else
+  Begin
+   imgMenuZoom.RotationAngle:=0;
+  end;
 end;
 
 procedure TFormMain.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -639,14 +826,53 @@ begin
   end;
 end;
 
+procedure TFormMain.UpdateZoom;
+begin
+  SkPaintBox.Width := FColunas * FCelulaSize;
+  SkPaintBox.Height := FLinhas * FCelulaSize;
+  PreRenderCellTexture; // Atualiza textura das células
+  RepositionSkPaintBox; // Reposiciona no ScrollBox
+  SkPaintBox.Redraw;    // Força redesenho
+end;
 
+procedure TFormMain.FormGesture(
+  Sender: TObject;
+  const EventInfo: TGestureEventInfo;
+  var Handled: Boolean
+);
+var
+  LCurrentDistance: Integer;
+  LZoomFactor: Single;
+begin
+  if EventInfo.GestureID = igiZoom then
+  begin
+    // Verifica se o evento é o início do gesto
+    if TInteractiveGestureFlag.gfBegin in EventInfo.Flags then
+    begin
+      FLastZoomDistance := EventInfo.Distance; // Salva distância inicial
+    end
 
-
+    // Verifica se o evento é o fim do gesto
+    else if TInteractiveGestureFlag.gfEnd in EventInfo.Flags then
+    begin
+      LCurrentDistance := EventInfo.Distance;
+      if FLastZoomDistance <> 0 then // Evita divisão por zero
+      begin
+        LZoomFactor := LCurrentDistance / FLastZoomDistance;
+        FCelulaSize := Round(EnsureRange(FCelulaSize * LZoomFactor, 20, 80));
+        UpdateZoom;
+        Handled := True;
+      end;
+      FLastZoomDistance := 0; // Reseta para próxima interação
+    end;
+  end;
+end;
 
 procedure TFormMain.FormCreate(Sender: TObject);
 Var
   MinesCounter: string;
 begin
+FCelulaSize:=40;
    MinesCounter:=CarregarShaderRecurso('SKNUMBER');
    NSKeffect:= Tskruntimeeffect.makeforshader(MinesCounter,error);
    NSKShaderBuilder:=  TSkRuntimeShaderBuilder.Create(NSKeffect);
@@ -656,9 +882,6 @@ begin
    NTKShaderBuilder:=  TSkRuntimeShaderBuilder.Create(NTKeffect);
    NTKShader:=NTKshaderBuilder.MakeShader;
 
-  laymenu.Position.y:=-203;
-  laymenu.Position.x:= rectbackground.Width -laymenu.Width -10;
-
 
   ScrollBoxGame.Touch.InteractiveGestures := [TInteractiveGesture.Pan];
   SetLevel(tgamelevel.glBeginner,0,0,0); // Initial level
@@ -667,13 +890,35 @@ begin
   ConfigurarAnimacoes;  //Configure initial animations
   NovoJogo;  //load initial game board
 
-
+Touch.InteractiveGestures := [TInteractiveGesture.Pan, TInteractiveGesture.Zoom];
+  Touch.GestureManager := GestureManager1;
 end;
 
 procedure TFormMain.FormResize(Sender: TObject);
 begin
-RepositionSkPaintBox;
+ RepositionSkPaintBox;
  MiniMapPaintBox.Redraw; // Atualiza o minimapa
+
+ laymenu.Position.y:=-310;
+ laymenu.Position.x:= rectbackground.Width -laymenu.Width -10;
+
+ LayMenuZoom.Position.y:= rectbackground.Height/2;
+ LayMenuZoom.Position.x:= (LayMenuZoom.Width-20)*-1;
+
+if LayBeginGame.Visible then
+Begin
+   laybegingame.Width:=rectbackground.Width;
+   laybegingame.Height:=rectbackground.Height;
+End;
+
+end;
+
+procedure TFormMain.FormShow(Sender: TObject);
+begin
+RepositionSkPaintBox;
+  //inicia animação Begin Game
+  Tsoundmanager.PlaySound('venceu');
+  BeginAnimationStart;
 end;
 
 procedure TFormMain.NovoJogo;
@@ -709,7 +954,6 @@ begin
   FGameOver := False;
 
   SkPaintBox.Redraw;
-
 
 end;
 
@@ -805,7 +1049,7 @@ var
   LBaseColor: TAlphaColorF;
   LDarkerColor: TAlphaColor;
 begin
-  FCelulaSize := 25; //Min(SkPaintBox.Width / FColunas, SkPaintBox.Height / FLinhas);
+  //FCelulaSize := 30; //Min(SkPaintBox.Width / FColunas, SkPaintBox.Height / FLinhas);
 
   // Drawing the bottom of the board
   APaint := TSkPaint.Create;
@@ -877,6 +1121,8 @@ begin
       end;
       if CelulasMarcadas[I][J] then begin
         LKey := Point(I, J);
+        if not FAnimations.ContainsKey(LKey) then
+          FAnimations.Add(LKey, 0);
         if FAnimations.TryGetValue(LKey, LProgress) then begin
           FFlagAnimation.SeekFrametime(LProgress);
 
@@ -992,18 +1238,24 @@ begin
   end;
 end;
 
+procedure TFormMain.CloseMenu;
+Begin
+   if laymenu.Tag=1 then
+ Begin
+ FloatAnimationMenu.StartValue:=4;
+ FloatAnimationMenu.StopValue:= -310;
+ FloatAnimationMenu.Start;
+    laymenu.Tag:=0;
+ End;
+End;
+
 procedure TFormMain.SkPaintBoxMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Single);
  // var
  //   LScrollPos: TPointF;
 begin
- if laymenu.Tag=1 then
- Begin
- FloatAnimationMenu.StartValue:=4;
- FloatAnimationMenu.StopValue:= -204;
- FloatAnimationMenu.Start;
-    laymenu.Tag:=0;
- End;
+closemenu;
+closemenuzoom;
 
   FIsScrolling := False;
   FLastMousePos := PointF(X, Y); // Guardar posição inicial
@@ -1215,6 +1467,24 @@ Lpaint.AntiAlias:=True;
 Drawclock(Acanvas, Adest,Lpaint);
 end;
 
+procedure TFormMain.SkSvg3Click(Sender: TObject);
+begin
+{$IFDEF MSWINDOWS}
+ SkSvg3Tap(Sender,Tpointf.create(0,0));
+{$ENDIF}
+end;
+
+procedure TFormMain.SkSvg3Tap(Sender: TObject; const Point: TPointF);
+begin
+
+FrmAbout:=TFrmAbout.create(nil);
+{$ifdef ANDROID}
+FrmAbout.WindowState:= Twindowstate.wsMaximized;
+{$ENDIF}
+FrmAbout.Show;
+closemenu;
+end;
+
 procedure TFormMain.IMgLevelClick(Sender: TObject);
 begin
 {$IFDEF MSWINDOWS}
@@ -1241,7 +1511,74 @@ begin
   except
     FormLevel.Free;
   end;
+  closemenu;
+end;
 
+procedure TFormMain.ImgLoadGameClick(Sender: TObject);
+begin
+ {$IFDEF MSWINDOWS}
+ImgLoadGameTap(Sender,TPointF.Create(0,0));
+{$ENDIF}
+end;
+
+procedure TFormMain.ImgLoadGameTap(Sender: TObject; const Point: TPointF);
+begin
+ {$IFDEF MSWINDOWS}
+  CarregarJogo('savegame.msv');
+  {$ELSE}
+  CarregarJogo(system.ioutils.TPath.Combine(system.ioutils.TPath.GetDocumentsPath, 'savegame.msv'));
+  {$ENDIF}
+  closemenu;
+end;
+
+procedure TFormMain.CloseMenuZoom;
+Begin
+   if laymenuzoom.Tag=1 then
+ Begin
+ FloatAnimationzoom.StartValue:=3;
+ FloatAnimationzoom.StopValue:= ((laymenuzoom.Width -20)*-1);
+ FloatAnimationzoom.Start;
+    laymenuzoom.Tag:=0;
+ End;
+End;
+
+procedure TFormMain.imgMenuZoomClick(Sender: TObject);
+begin
+ {$IFDEF MSWINDOWS}
+  imgMenuZoomTap(Sender,TPointF.Create(0,0));
+ {$ENDIF}
+end;
+
+procedure TFormMain.imgMenuZoomTap(Sender: TObject; const Point: TPointF);
+begin
+ if laymenuzoom.Tag=1 then
+ Begin
+   CloseMenuZoom;
+ End
+ else
+ Begin
+  FloatAnimationzoom.StartValue:=((laymenuzoom.Width-20)*-1);
+  FloatAnimationzoom.StopValue:= 3;
+  FloatAnimationzoom.Start;
+  laymenuzoom.Tag:=1;
+ End;
+end;
+
+procedure TFormMain.ImgSaveGameClick(Sender: TObject);
+begin
+{$IFDEF MSWINDOWS}
+  ImgSaveGameTap(Sender,TPointF.Create(0,0));
+  {$ENDIF}
+end;
+
+procedure TFormMain.ImgSaveGameTap(Sender: TObject; const Point: TPointF);
+begin
+  {$IFDEF MSWINDOWS}
+  SalvarJogo('savegame.msv');
+  {$ELSE}
+  SalvarJogo(system.ioutils.TPath.Combine(system.ioutils.TPath.GetDocumentsPath, 'savegame.msv'));
+  {$ENDIF}
+  closemenu;
 end;
 
 procedure TFormMain.imgsetabtnmenuClick(Sender: TObject);
@@ -1249,14 +1586,11 @@ begin
 
  if laymenu.Tag=1 then
  Begin
- FloatAnimationMenu.StartValue:=4;
- FloatAnimationMenu.StopValue:= -204;
- FloatAnimationMenu.Start;
-    laymenu.Tag:=0;
+   closemenu;
  End
  else
  Begin
-  FloatAnimationMenu.StartValue:=-204;
+  FloatAnimationMenu.StartValue:=-310;
   FloatAnimationMenu.StopValue:= 4;
   FloatAnimationMenu.Start;
   laymenu.Tag:=1;
@@ -1312,6 +1646,8 @@ procedure TFormMain.AnimationTimerTimer(Sender: TObject);
 var
   LKey: Tpoint;
 begin
+if FAnimations.Count = 0 then Exit;
+
   // Update animation progress
   for LKey in FAnimations.Keys.ToArray do begin
     FAnimations[LKey] := FAnimations[LKey] + 0.06; // Incrementa 16ms
@@ -1348,6 +1684,107 @@ begin
     Timer.Enabled := False;
     Tsoundmanager.PlaySound('gameover');
   end;
+end;
+
+procedure TFormMain.CarregarJogo(const NomeArquivo: string);
+var
+  Stream: TFileStream;
+  I, J: Integer;
+  TempByte: Byte;
+  FileVersion: array[0..3] of AnsiChar;
+  TempoDecorrido: Integer;
+  LevelInt: Integer;
+begin
+  Stream := TFileStream.Create(NomeArquivo, fmOpenRead);
+  try
+    // Verificar versão do arquivo
+    Stream.ReadBuffer(FileVersion, 4);
+    if FileVersion <> 'MSV1' then
+      raise Exception.Create('Formato de arquivo inválido');
+
+    Stream.ReadBuffer(LevelInt, SizeOf(LevelInt));
+    FGameLevel := TGameLevel(LevelInt);
+
+    // Ler dimensões do campo
+    Stream.ReadBuffer(FColunas, SizeOf(FColunas));
+    Stream.ReadBuffer(FLinhas, SizeOf(FLinhas));
+    Stream.ReadBuffer(NUM_MINAS, SizeOf(NUM_MINAS));
+
+    if FGameLevel = glCustom then
+      SetLevel(FGameLevel, FColunas, FLinhas, NUM_MINAS)
+    else
+      SetLevel(FGameLevel, 0, 0, 0); // Níveis padrão usam configurações internas
+
+    // Reinicializar arrays com novas dimensões
+    SetLength(MinasArray, FColunas, FLinhas);
+    SetLength(CelulasReveladas, FColunas, FLinhas);
+    SetLength(CelulasMarcadas, FColunas, FLinhas);
+
+    // Ler matrizes
+    for I := 0 to FColunas - 1 do
+      for J := 0 to FLinhas - 1 do
+      begin
+        Stream.ReadBuffer(TempByte, SizeOf(TempByte));
+        MinasArray[I][J] := Boolean(TempByte);
+      end;
+
+    for I := 0 to FColunas - 1 do
+      for J := 0 to FLinhas - 1 do
+      begin
+        Stream.ReadBuffer(TempByte, SizeOf(TempByte));
+        CelulasReveladas[I][J] := Boolean(TempByte);
+      end;
+
+    for I := 0 to FColunas - 1 do
+      for J := 0 to FLinhas - 1 do
+      begin
+        Stream.ReadBuffer(TempByte, SizeOf(TempByte));
+        CelulasMarcadas[I][J] := Boolean(TempByte);
+      end;
+
+    // Ler estado do jogo
+    Stream.ReadBuffer(FPrimeiroClique, SizeOf(FPrimeiroClique));
+    Stream.ReadBuffer(FGameOver, SizeOf(FGameOver));
+    Stream.ReadBuffer(MinasRestantes, SizeOf(MinasRestantes));
+
+     FAnimations.Clear; // Limpar animações existentes
+
+       // Restaurar animações das bandeiras
+    for I := 0 to FColunas - 1 do
+      for J := 0 to FLinhas - 1 do
+      begin
+        if CelulasMarcadas[I][J] then
+        begin
+          FAnimations.Add(Point(I, J), 0); // Iniciar progresso da animação
+        end;
+      end;
+
+    // Garantir que o timer de animação está ativo
+    FAnimationTimer.Enabled := True;
+
+    // Configurar tempo
+    Stream.ReadBuffer(TempoDecorrido, SizeOf(TempoDecorrido));
+    if not FPrimeiroClique then
+      FTempoInicio := IncSecond(Now, -TempoDecorrido)
+    else
+      FTempoInicio := Now;
+
+    // Atualizar interface
+    NrMinas := MinasRestantes;
+    NrSeconds := TempoDecorrido;
+    Timer.Enabled := not FGameOver and not FPrimeiroClique;
+
+    // Redesenhar o jogo
+    SkPaintBox.Width := FColunas * FCelulaSize;
+    SkPaintBox.Height := FLinhas * FCelulaSize;
+    RepositionSkPaintBox;
+    SkPaintBox.Redraw;
+
+  finally
+    Stream.Free;
+  end;
+
+
 end;
 
 procedure TFormMain.ConfigurarAnimacoes;
@@ -1519,6 +1956,7 @@ begin
   finally
 //
   end;
+  closemenu;
 end;
 
 procedure TFormMain.BtnHighScoresClick(Sender: TObject);
@@ -1536,7 +1974,7 @@ begin
     Form.Free;
     raise;
   end;
-
+  closemenu;
 end;
 
 procedure TFormMain.HandleLevelSelected(Sender: TObject; ALevel: TGameLevel;
@@ -1551,6 +1989,79 @@ begin
   NovoJogo;
   TFormLevelSelect(Sender).close;
  ScrollBoxGame.InvalidateContentSize;
+end;
+
+
+procedure TFormMain.BeginAnimationStart;
+begin
+
+laybegingame.Width:=rectbackground.Width;
+laybegingame.Height:=rectbackground.Height;
+laybegingame.Position.X:=0;
+laybegingame.Position.Y:=rectbackground.Height*-1;
+laybegingame.Visible:=True;
+
+Floatanimationstart.StartValue:=rectbackground.Height*-1;
+Floatanimationstart.StopValue:=0;
+Floatanimationstart.Start;
+end;
+
+procedure TFormMain.CloseAnimationStart;
+begin
+laybegingame.Height:=rectbackground.Height;
+laybegingame.Position.X:=0;
+laybegingame.Position.Y:=rectbackground.Height*-1;
+
+ Floatanimationstart.StartValue:=0;
+ Floatanimationstart.StopValue:=FormMain.Height*-1;
+ Floatanimationstart.Start;
+end;
+
+procedure TFormMain.imgbuttonstartClick(Sender: TObject);
+begin
+{$IFDEF MSWINDOWS}
+imgbuttonstartTap(Sender,TPointF.create(0,0));
+{$ENDIF}
+end;
+
+procedure TFormMain.imgbuttonstartTap(Sender: TObject; const Point: TPointF);
+begin
+Tsoundmanager.PlaySound('click');
+ CloseAnimationStart;
+end;
+
+procedure TFormMain.imgcelllargerClick(Sender: TObject);
+begin
+{$IFDEF MSWINDOWS}
+imgcelllargerTap(sender,TPointf.create(0,0));
+{$ENDIF}
+end;
+
+procedure TFormMain.imgcelllargerTap(Sender: TObject; const Point: TPointF);
+begin
+
+ if FCelulaSize < 80 then  // Limite máximo
+  begin
+    FCelulaSize := FCelulaSize + 5;
+    UpdateZoom;
+  end;
+
+end;
+
+procedure TFormMain.imgcellsmallClick(Sender: TObject);
+begin
+{$IFDEF MSWINDOWS}
+imgcellsmallTap(sender,TPointf.create(0,0));
+{$ENDIF}
+end;
+
+procedure TFormMain.imgcellsmallTap(Sender: TObject; const Point: TPointF);
+begin
+ if FCelulaSize > 25 then  // Limite mínimo
+  begin
+    FCelulaSize := FCelulaSize - 5;
+    UpdateZoom;
+  end;
 end;
 
 procedure TFormMain.btnnewLevelClick(Sender: TObject);
