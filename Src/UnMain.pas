@@ -1911,7 +1911,7 @@ var
   I, J: Integer;
 begin
   FGameOver := True;
-  FGameEndMessage := 'YOU LOOSE !';
+  FGameEndMessage := 'YOU LOSE !';
   FGameEndColor := $FFFF4444;
   FGameEndAnimationProgress := 0;
   sklabelgameover.Words[0].Text:= FGameEndMessage;
